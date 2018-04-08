@@ -91,6 +91,14 @@ public abstract class Block {
         return this.output.get( order );
     }
 
+    public Integer getCountInput() {
+        return this.countInput;
+    }
+
+    public Integer getCountOutput() {
+        return this.countOutput;
+    }
+
     public void execute() {
     }
 
