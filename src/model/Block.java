@@ -61,6 +61,9 @@ public abstract class Block {
             this.input.get( order ).setValue( map );
         }
     }
+	public void setOutput( HashMap map, Integer order ) {
+			this.output.get( order ).setValue( map );
+	 }
 
     public boolean isFreeInput() {
         for ( Port port : this.input.values() ) {
