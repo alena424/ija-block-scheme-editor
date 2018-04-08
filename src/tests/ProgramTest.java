@@ -17,7 +17,7 @@ public class ProgramTest {
 
     @Before
     public void setUp() throws Exception {
-
+		scheme = new Scheme( 1 );
         first = new AdditionBlock( scheme, 0);
         second = new AdditionBlock( scheme, 0);
         third = new AdditionBlock( scheme, 0);
