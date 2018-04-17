@@ -14,11 +14,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class AdditionBlock extends Block {
-    public AdditionBlock( Scheme scheme, Integer level ) {
-        super( scheme, level );
-        this.addInputPort( "Alena" );
-        this.addInputPort( "Alena" );
-        this.addOutputPort( "Alena" );
+
+    public AdditionBlock( ) {
+        //super( scheme, level );
+        icon = "img/addition.png";
+        selectedIcon = "img/selected/addition-sel.png";
+        name = "Addition";
+        this.addInputPort( "Number" );
+        this.addInputPort( "Number" );
+        this.addOutputPort( "Number" );
     }
 
     public void execute() {

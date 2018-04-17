@@ -11,7 +11,11 @@
 package model;
 
 public class MultiplicationBlock extends Block {
-    public MultiplicationBlock( Scheme scheme, Integer level ) {
-        super( scheme, level );
+
+    public MultiplicationBlock(  ) {
+
+        name = "Multiplication";
+        icon = "img/multiplication.png";
+        selectedIcon = "img/selected/multiplication.png";
     }
 }

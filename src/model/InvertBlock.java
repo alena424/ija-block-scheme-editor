@@ -11,7 +11,10 @@
 package model;
 
 public class InvertBlock extends Block {
-    public InvertBlock( Scheme scheme, Integer level ) {
-        super( scheme, level );
+
+    public InvertBlock(  ) {
+        icon = "img/invert.png";
+        name = "Invert";
+        selectedIcon = "img/selected/invert.png";
     }
 }

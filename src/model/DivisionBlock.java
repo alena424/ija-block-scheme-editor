@@ -11,7 +11,11 @@
 package model;
 
 public class DivisionBlock extends Block {
-    public DivisionBlock( Scheme scheme, Integer level ) {
-        super( scheme, level );
+
+    public DivisionBlock( ) {
+        /*super( scheme, level )*/;
+        icon = "img/division.png";
+        selectedIcon = "img/selected/division.png";
+        name = "Division";
     }
 }

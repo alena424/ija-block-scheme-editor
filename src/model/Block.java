@@ -10,6 +10,7 @@
 
 package model;
 
+import javax.swing.*;
 import java.util.HashMap;
 
 
@@ -21,15 +22,40 @@ public abstract class Block {
     protected Integer level = 0;
     protected Integer countInput = 0;
     protected Integer countOutput = 0;
-    protected Scheme scheme;
+    protected String name;
+    public Integer static_x = 0;
+    public Integer static_y = 0;
 
-    public Block ( Scheme scheme, Integer level ) {
-        Integer newId = scheme.getMaxId();
-        this.id = newId;
-        this.level = level;
-        this.scheme = scheme;
+    public boolean static_block = false; // flag, block can not be deleted and position is static
+    // defaultIcon
+    String icon = "img/default.png";
+    String selectedIcon = "img/default.png";
 
-        scheme.addBlock( this );
+   // protected Scheme scheme;
+
+    public Block () {
+
+        //Integer newId = scheme.getMaxId();
+        //this.id = newId;
+        //this.level = level;
+       // this.scheme = scheme;
+
+        //scheme.addBlock( this );
+    }
+
+    public String getSelectedIcon() {
+        return selectedIcon;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ImageIcon getIcon(){
+        return new ImageIcon(icon);
+    }
+    public String getPathOfIcon(){
+        return icon;
     }
 
     public Integer getId() {
@@ -61,9 +87,10 @@ public abstract class Block {
             this.input.get( order ).setValue( map );
         }
     }
-	public void setOutput( HashMap map, Integer order ) {
-			this.output.get( order ).setValue( map );
-	 }
+
+    public void setOutput( HashMap map, Integer order ) {
+            this.output.get( order ).setValue( map );
+    }
 
     public boolean isFreeInput() {
         for ( Port port : this.input.values() ) {
@@ -91,13 +118,7 @@ public abstract class Block {
         return this.output.get( order );
     }
 
-    public Integer getCountInput() {
-        return this.countInput;
-    }
 
-    public Integer getCountOutput() {
-        return this.countOutput;
-    }
 
     public void execute() {
     }

@@ -10,6 +10,8 @@
 
 package model;
 
+import view.AbstractBlock;
+
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -19,8 +21,13 @@ public class Scheme {
     private Integer maxId = 0;
     private boolean cycle = false;
     private boolean levelFault = false;
+    protected FactoryBlock blockFactory = new FactoryBlock();
+    //protected AbstractBlock[] factoreBlock;
+    List<Block> factoreBlock = new ArrayList<Block>();
+    // generated block to work with
 
     public Scheme( Integer id ) {
+
         this.id = id;
     }
 
@@ -41,7 +48,27 @@ public class Scheme {
         this.maxId++;
     }
 
-    public void removeBlock( Block delBlock ) {
+    /**
+     * Class for creating objects
+     * @param name identification of the block (p.e. Addition, Invert)
+     *
+     */
+    public void factorBlock(String name){
+        factoreBlock.add( blockFactory.getBlock(name ));
+    }
+
+    /**
+     * how many block we have at the moment
+     */
+    public Integer numberFactorBlock(){
+        return factoreBlock.size();
+    }
+
+    public List<Block> getFactoreBlock() {
+        return factoreBlock;
+    }
+
+    public void removeBlock(Block delBlock ) {
         delBlock.deleteBlockConnection();
         this.allBlocks.remove( delBlock.id );
     }

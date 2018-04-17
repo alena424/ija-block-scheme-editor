@@ -11,7 +11,10 @@
 package model;
 
 public class RandomBlock extends Block {
-    public RandomBlock( Scheme scheme, Integer level ) {
-        super( scheme, level );
+    public RandomBlock( ) {
+
+        icon = "img/random.png";
+        name = "Random";
+        selectedIcon = "img/selected/random.png";
     }
 }
