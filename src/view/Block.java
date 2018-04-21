@@ -5,8 +5,10 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.GeneralPath;
 
+import static java.lang.Math.abs;
+
 public class Block extends AbstractBlock {
-    GeneralPath path = null;
+    //GeneralPath path = null;
     private boolean twoPoints = false;
     /*Point previousPoint;
     Graphics g= null;*/
@@ -14,8 +16,8 @@ public class Block extends AbstractBlock {
     public Block(String identification, JLabel label) {
         super(identification, label);
         // defaultne se nachazi tam, kde se vygeneroval
-        setX(310);
-        setY(45);
+        setX(20);
+        setY(20);
 
     }
 
@@ -43,10 +45,7 @@ public class Block extends AbstractBlock {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if ( SwingUtilities.isRightMouseButton(e) ){
-            System.out.println("right click");
-            deleteBlock();
-        }
+
         //e.
        /* if ( SwingUtilities.isLeftMouseButton( e)){
             Point actualPoint = e.getPoint();
@@ -81,12 +80,38 @@ public class Block extends AbstractBlock {
         System.out.println("Pressed");
         x = event.getX();
         y = event.getY();
+        System.out.println(x);
+        System.out.println(y);
+
+    }
+    @Override
+    public void mouseReleased(MouseEvent event) {
+        System.out.println("release");
+        x = event.getX()+event.getComponent().getX()-x;
+        y = event.getY()+event.getComponent().getY()-y;
+
+        System.out.println(x);
+        System.out.println(y);
+        //updateOutputPort();
+        //updateInputPort();
+        //System.out.println(inputPortPoints);
+        //System.out.println(outputPortPoints);
 
     }
     @Override
     public void mouseDragged(MouseEvent event) {
         System.out.println("Dragged");
-        event.getComponent().setLocation(event.getX()+event.getComponent().getX()-x,   event.getY()+event.getComponent().getY()-y);
+        System.out.println(event.getPoint());
+        if ( event.getComponent().getY() <= 0 && event.getComponent().getX() <= 0 ){
+            event.getComponent().setLocation(abs(event.getX()+event.getComponent().getX()-x),abs(event.getY()+event.getComponent().getY()-y) );
+        } else if ( event.getComponent().getX() > 660 ) {
+            event.getComponent().setLocation(660,   event.getY()+event.getComponent().getY()-y);
+        } else if ( event.getComponent().getY() > 550 ) {
+            event.getComponent().setLocation(event.getX()+event.getComponent().getX()-x,   550);
+        } else {
+            event.getComponent().setLocation(abs(event.getX()+event.getComponent().getX()-x),abs(event.getY()+event.getComponent().getY()-y) );
+
+        }
     }
 
 
