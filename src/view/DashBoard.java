@@ -16,12 +16,13 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class DashBoard extends JPanel {
     JFrame frame1 = new JFrame("Block editor");
-    JPanel panel1 = new JPanel();
-    JPanel panel2 = new JPanel();
+    public JPanel panel1 = new JPanel();
+    public JPanel panel2 ;
     JButton lhelp = new JButton();
     JLabel lwelcome = new JLabel();
     JLabel laddion = new JLabel();
@@ -33,24 +34,50 @@ public class DashBoard extends JPanel {
     JButton bcount = new JButton();
     JButton bload = new JButton();
     JButton bsave = new JButton();
+    JButton bdebug = new JButton();
     JLabel lend = new JLabel();
     JLabel lstart = new JLabel();
     JLabel ldown = new JLabel();
     JLabel lup = new JLabel();
     JLabel lleftpan = new JLabel();
     JLabel lback = new JLabel();
+    // block on the left, maximum now is 10
+    List <JLabel> labelblock = new ArrayList<>();
+    //all connections
+    List <Connection> connectionsOnDashboard = new ArrayList<>();
+
    // Container frame1ContentPane;
 
     /**
      * Method displays a dashboard, needs to know which blocks should be displayed
-     * @param factoreblock array of blocks to work with
      */
-    public DashBoard(List<model.Block> factoreblock){
+    public DashBoard(){
        // Container frame1ContentPane = frame1.getContentPane();
         //frame1ContentPane.setLayout(null);
         frame1.setResizable(false);
+        panel2 = new JPanel(){
+            @Override
+            public void paintComponent(Graphics g)
+            {
+                // draw all connections
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                int width = 4;
+                g2d.setStroke(new BasicStroke(width));
 
-        panel2.setOpaque(false);
+                g2d.setColor(new Color(61,204,199));
+                for (Connection i: connectionsOnDashboard
+                     ) {
+                    System.out.println("Draw line: ");
+                    System.out.println(i.cooFrom);
+                    System.out.println(i.cooTo);
+                    g2d.drawLine(i.cooFrom.x,i.cooFrom.y, i.cooTo.x, i.cooTo.y);
+                }
+            }
+        };
+
+        panel2.setOpaque(true);
+        panel2.setBackground(new Color(238, 238, 238));
         panel2.setLayout(null);
         panel1.add(panel2);
         panel2.setBounds(295, 25, 705, 625);
@@ -65,65 +92,6 @@ public class DashBoard extends JPanel {
         panel1.add(lwelcome);
         lwelcome.setBounds(15, 20, 255, 60);
 
-        // default height and width of block
-        Integer width = 65;
-        Integer height = 70;
-
-        // position of first block
-        Integer X = 30;
-        Integer Y = 200;
-
-        Integer i = 0; // counter
-        JLabel [] labelblock = new JLabel[factoreblock.size()];
-        for ( model.Block block : factoreblock ){
-            if ( i % 3 == 0 && i != 0){
-                Y += 85;
-                X = 30;
-            }
-            //JLabel label = new JLabel();
-            labelblock[i] = new JLabel();
-            labelblock[i].setIcon(block.getIcon());
-            panel1.add(labelblock[i]);
-
-            Integer finalI = i;
-            labelblock[i].addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    labelblock[finalI].setToolTipText( block.getName());
-                }
-            });
-
-
-            if ( block.static_block){
-                labelblock[i].setBounds(block.static_x, block.static_y, width, height);
-            } else{
-                labelblock[i].setBounds(X, Y, width, height);
-                labelblock[i].addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        JLabel lblock = new JLabel();
-                        System.out.println(block.getName());
-                        Block addBlock = new Block(block.getName(), lblock);
-                        addBlock.setPath(block.getPathOfIcon());
-                        addBlock.setName(block.getName());
-                        addBlock.setSelectedPath(block.getSelectedIcon());
-                        generateBlock(addBlock);
-
-                        lblock.addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mouseClicked(MouseEvent e) {
-                                super.mouseClicked(e);
-                                System.out.println(" click22");
-                            }
-                        });
-
-                    }
-                });
-                X += 85;
-                i++;
-            }
-
-        }
 
         /*
         //---- laddion ----
@@ -249,14 +217,14 @@ public class DashBoard extends JPanel {
             }
         });
         panel1.add(bload);
-        bload.setBounds(55, 90, 80, 45);
+        bload.setBounds(15, 90, 80, 40);
 
         //---- bsave ----
         bsave.setText("SAVE");
         bsave.setBackground(new Color(61, 204, 199));
         bsave.setFont(bsave.getFont().deriveFont(bsave.getFont().getSize() + 3f));
         panel1.add(bsave);
-        bsave.setBounds(150, 90, 80, 45);
+        bsave.setBounds(105, 90, 80, 40);
         bsave.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -264,19 +232,26 @@ public class DashBoard extends JPanel {
             }
         });
 
+        //---- bdebug ----
+        bdebug.setText("DEBUG");
+        bdebug.setBackground(new Color(61, 204, 199));
+        bdebug.setFont(bdebug.getFont().deriveFont(bdebug.getFont().getSize() + 1f));
+        panel1.add(bdebug);
+        bdebug.setBounds(195, 90, 80, 40);
+
         //---- lend ----
         //lend.setIcon(new ImageIcon("img/equals.png"));
         //panel1.add(lend);
         //lend.setBounds(new Rectangle(new Point(600, 575), lend.getPreferredSize()));
-        EndBlock endblock = new EndBlock("end", lend);
-        generateBlock(endblock );
+       // EndBlock endblock = new EndBlock("end", lend);
+       // generateBlock(endblock );
 
         //---- lstart ----
         //lstart.setIcon(new ImageIcon( "img/minus.png") );
         //panel1.add(lstart);
         //lstart.setBounds(new Rectangle(new Point(600, 40), lstart.getPreferredSize()));
-        StartBlock startblock = new StartBlock("start", lstart);
-        generateBlock(startblock );
+        //StartBlock startblock = new StartBlock("start", lstart);
+        //generateBlock(startblock );
 
         //---- lhelp ----
         lhelp.setText("HELP");
@@ -301,6 +276,55 @@ public class DashBoard extends JPanel {
         panel1.add(lup);
         lup.setBounds(0, 0, 1000, 25);
 
+    }
+    public void getBlocksOnLeft(List<model.Block> factoreblock){
+        // default height and width of block
+        Integer width = 65;
+        Integer height = 70;
+
+        // position of first block
+        Integer X = 30;
+        Integer Y = 200;
+
+        Integer i = 0; // counter for block placed in left panel
+        System.out.println(factoreblock);
+        int counter = 0; // counter global from 0 ..
+        for ( model.Block block : factoreblock ){
+            if ( i % 3 == 0 && i != 0){
+                Y += 85;
+                X = 30;
+            }
+            //JLabel label = new JLabel();
+            labelblock.add( new JLabel() );
+            System.out.println(block.getName());
+
+            labelblock.get(counter).setIcon(block.getIcon());
+            labelblock.get(counter).setText( block.getName());
+            panel1.add(labelblock.get(counter));
+
+            Integer finalI = counter;
+            labelblock.get(counter).addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    labelblock.get(finalI).setToolTipText( block.getName());
+                }
+            });
+
+            if ( block.static_block){
+                //System.out.println("static");
+                //labelblock.get(counter).setBounds(block.static_x, block.static_y, width, height);
+            } else{
+                labelblock.get(counter).setBounds(X, Y, width, height);
+
+                X += 85;
+                i++;
+
+            }
+            counter++;
+
+
+        }
+
         //---- lleftpan ----
         lleftpan.setOpaque(true);
         lleftpan.setFont(lleftpan.getFont().deriveFont(lleftpan.getFont().getSize() + 4f));
@@ -308,17 +332,28 @@ public class DashBoard extends JPanel {
         panel1.add(lleftpan);
         lleftpan.setBounds(0, 0, 295, 670);
 
-
+    }
+    public List<JLabel> getBlocksOnPanel(){
+        return this.labelblock;
     }
 
-    public void generateBlock(AbstractBlock block){
+    public List<Connection> getConnectionsOnDashboard() {
+        return connectionsOnDashboard;
+    }
 
-        block.labelBlock.setIcon(new ImageIcon( block.getPath() ) );
-        System.out.println(block.getPath());
-
-        panel1.add(block.labelBlock);
-        block.labelBlock.setBounds(block.getXBlock(), block.getYBlock(), block.getWidthBlock(), block.getHeightBlock());
-        System.out.println( getComponentZOrder(block.labelBlock) );
+    public void addConnectionsOnDashboard(Connection conn) {
+        this.connectionsOnDashboard.add(conn);
+        panel2.repaint();
+    }
+    public void removeConnectionOnDashboard(Connection conn){
+        Integer index = this.connectionsOnDashboard.indexOf(conn);
+        if ( index == -1 ){
+            // unexisting connection
+            System.err.println("You want to delete unexisting connection");
+        } else {
+            connectionsOnDashboard.remove(conn);
+            System.out.println("Connection was deleted\n");
+        }
     }
 
     public void setVisible() {
