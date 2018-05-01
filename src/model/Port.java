@@ -14,28 +14,61 @@ import java.util.HashMap;
 import java.util.*;
 
 public class Port {
-    private HashMap<String,Double> value = new HashMap<String, Double>();
-    private String type;
+    public HashMap<String,Double> value ;
+    private Integer type; // type 1 - input port, type 2 - output port
+    private String name;
     private Block ownerBlock;
     private boolean free = true;
     private Integer id;
     private Connection connection;
 
-    public Port( Integer id, String type, Block ownerBlock ) {
+    public Port( String name, HashMap<String,Double> hashvalue ) {
+        this.name = name;
+        value = new HashMap<String, Double>();
+        for ( String nameVal : hashvalue.keySet()){
+            value.put(nameVal, hashvalue.get(nameVal));
+
+        }
+        System.out.println(hashvalue);
+        //this.id = id;
+        //this.type = type;
+        //this.ownerBlock = ownerBlock;
+    }
+
+
+    public void setId(Integer id) {
         this.id = id;
-        this.type = type;
-        this.ownerBlock = ownerBlock;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Block getBlock() {
         return this.ownerBlock;
     }
 
+    public void setOwnerBlock(Block ownerBlock) {
+        this.ownerBlock = ownerBlock;
+    }
+
     public boolean isFree() {
         return this.free;
     }
 
-    public String getType() {
+    public void setFree() {
+        this.free = true;
+    }
+    public void setUnFree() {
+        this.free = false;
+    }
+
+
+    public Integer getType() {
         return this.type;
     }
 
@@ -65,7 +98,7 @@ public class Port {
         this.value.remove( name );
     }
 
-    public HashMap getHashOfValue() {
+    public HashMap<String, Double> getHashOfValue() {
         return this.value;
     }
 

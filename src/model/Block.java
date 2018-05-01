@@ -12,35 +12,74 @@ package model;
 
 import javax.swing.*;
 import java.util.HashMap;
+import java.util.List;
 
 
 public abstract class Block {
 
     protected Integer id;
-    protected HashMap<Integer,Port> input = new HashMap<Integer, Port>();
-    protected HashMap<Integer,Port> output = new HashMap<Integer, Port>();
+    protected HashMap<Integer,Port> inputPorts; //= new HashMap<Integer, Port>();
+    protected HashMap<Integer,Port> outputPorts; //= new HashMap<Integer, Port>();
     protected Integer level = 0;
-    protected Integer countInput = 0;
-    protected Integer countOutput = 0;
+    public Integer countInput;
+    public Integer countOutput;
     protected String name;
     public Integer static_x = 0;
     public Integer static_y = 0;
 
     public boolean static_block = false; // flag, block can not be deleted and position is static
     // defaultIcon
-    String icon = "img/default.png";
-    String selectedIcon = "img/default.png";
+    public String icon = "img/default.png";
+    public String selectedIcon = "img/default.png";
 
    // protected Scheme scheme;
 
-    public Block () {
-
+    public Block (HashMap<Integer,Port> inputPortsPorts, HashMap<Integer,Port> outputPortsPorts) {
+        System.out.println(inputPortsPorts);
+        System.out.println(outputPortsPorts);
+        inputPorts = new HashMap<Integer, Port>(inputPortsPorts);
+        outputPorts = new HashMap<Integer, Port>(outputPortsPorts);
+        // set all ports to this block
+        for (Integer i : inputPortsPorts.keySet()){
+            inputPortsPorts.get(i).setOwnerBlock(this);
+        }
+        for (Integer i : outputPorts.keySet()){
+            outputPorts.get(i).setOwnerBlock(this);
+        }
+        
         //Integer newId = scheme.getMaxId();
         //this.id = newId;
         //this.level = level;
        // this.scheme = scheme;
 
         //scheme.addBlock( this );
+    }
+
+    protected Block() {
+    }
+
+    public HashMap<Integer, Port> getInputPorts() {
+        return inputPorts;
+    }
+
+    public HashMap<Integer, Port> getOutputPorts() {
+        return outputPorts;
+    }
+
+    public void setCountInput(Integer countInput) {
+        this.countInput = countInput;
+    }
+
+    public void setCountOutput(Integer countOutput) {
+        this.countOutput = countOutput;
+    }
+
+    public Integer getCountInput() {
+        return countInput;
+    }
+
+    public Integer getCountOutput() {
+        return countOutput;
     }
 
     public String getSelectedIcon() {
@@ -70,52 +109,81 @@ public abstract class Block {
         this.level = level;
     }
 
-    public void addInputPort( String type ) {
-        Port port = new Port( this.countInput, type, this );
-        this.input.put( this.countInput, port );
-        this.countInput++;
+    public boolean addinputPort( Integer id, Port port ) {
+        // check ID
+        if ( inputPorts.get(id) == null){
+            inputPorts.put(id,port);
+        } else {
+            System.err.println("clicked ID of input port is already used");
+            System.err.println(inputPorts);
+            return false;
+        }
+        port.setOwnerBlock(this);
+        return true;
     }
 
-    public void addOutputPort( String type ) {
-        Port port = new Port( this.countOutput, type, this );
-        this.output.put( this.countOutput, port );
-        this.countOutput++;
+    public boolean addoutputPort( Integer id, Port port) {
+        if ( outputPorts.get(id) == null ){
+            outputPorts.put(id,port);
+        } else {
+            System.err.println("clicked ID of output port is already used");
+            System.err.println(outputPorts);
+            return false;
+        }
+        port.setOwnerBlock(this);
+        return true;
+        //this.countOutput++;
     }
 
-    public void setInput( HashMap map, Integer order ) {
-        if ( this.level == 0 && this.countInput > order && this.input.get( order ).isFree() ) {
-            this.input.get( order ).setValue( map );
+    public void setInputPorts( HashMap map, Integer order ) {
+        if ( this.level == 0 && this.countInput > order && this.inputPorts.get( order ).isFree() ) {
+            this.inputPorts.get( order ).setValue( map );
         }
     }
 
-    public void setOutput( HashMap map, Integer order ) {
-            this.output.get( order ).setValue( map );
+    public void setOutputPorts( HashMap map, Integer order ) {
+            this.outputPorts.get( order ).setValue( map );
     }
 
     public boolean isFreeInput() {
-        for ( Port port : this.input.values() ) {
+        for ( Port port : this.inputPorts.values() ) {
             if ( port.isFree() ) {
                 return true;
             }
         }
         return false;
     }
+    public boolean isFreeOutput() {
+        for ( Port port : this.outputPorts.values() ) {
+            if ( port.isFree() ) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public void removeInputPort(Port port){
+        System.out.println(port.getId());
+        inputPorts.remove(port.getId());
+    }
+    public void removeOutputPort(Port port){
+        outputPorts.remove(port.getId());
+    }
 
     public void deleteBlockConnection() {
-        for ( Port port : this.input.values() ) {
+        for ( Port port : this.inputPorts.values() ) {
             port.unsetConnection();
         }
-        for ( Port port : this.output.values() ) {
+        for ( Port port : this.outputPorts.values() ) {
             port.unsetConnection();
         }
     }
 
-    public Port getInputPort( Integer order ) {
-        return this.input.get( order );
+    public Port getInputPortById( Integer order ) {
+        return this.inputPorts.get( order );
     }
 
-    public Port getOutputPort( Integer order ) {
-        return this.output.get( order );
+    public Port getOutputPortById( Integer order ) {
+        return this.outputPorts.get( order );
     }
 
 
