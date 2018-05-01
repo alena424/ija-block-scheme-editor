@@ -10,9 +10,13 @@
 
 package view;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
-public class Connection{
+public class Connection  {
     public Point cooFrom; // dynamic starting point
     public Point cooTo; // dynamic ending point
     
@@ -25,14 +29,39 @@ public class Connection{
     private AbstractBlock blockFrom; // reference to starting block where was clicked
     private AbstractBlock blockTo; // reference to end block where was clicked
 
+    public JLabel centerLabelToolTip;
+
     /**
      * Make connection of 2 blocks
      * @param A starting block from
      * @param B end block to
      */
-    public Connection(AbstractBlock A, AbstractBlock B){
+    public Connection(AbstractBlock A, AbstractBlock B, JLabel label){
         this.blockFrom = A;
         this.blockTo = B;
+        centerLabelToolTip = label;
+
+        centerLabelToolTip.setBackground(Color.BLUE);
+        centerLabelToolTip.setOpaque(true);
+        //centerLabelToolTip.
+        //centerLabelToolTip.setPreferredSize(new Dimension(20,20));
+
+    }
+    public Point positionOfLabel(){
+        // krok bude 1 pokud cooFrom.x je mensi nez cooTo.x, jinak -1
+        Integer stepX = (cooFrom.x - cooTo.x)/2 + cooTo.x;
+        Integer stepY = (cooFrom.y - cooTo.y)/2 + cooTo.y;
+        Point centerLine = new Point( stepX,  stepY);
+        centerLine.setLocation(centerLine.x-blockFrom.getWidthBlock()/4/2, centerLine.y-blockFrom.getHeightBlock()/4/2);
+        return centerLine;
+    }
+
+    public Integer getTypeFrom() {
+        return typeFrom;
+    }
+
+    public Integer getTypeTo() {
+        return typeTo;
     }
 
     public AbstractBlock getBlockFrom() {
@@ -90,5 +119,12 @@ public class Connection{
         blockTo.updateOutputPort();
         setCooFrom( blockFrom.getPort(idFromPort, typeFrom) );
         setCooTo( blockTo.getPort(idToPort, typeTo) );
+        System.out.println(cooTo);
+        System.out.println(cooFrom);
+        System.out.println(positionOfLabel());
+
+        centerLabelToolTip.setBounds(positionOfLabel().x, positionOfLabel().y,
+                blockFrom.getWidthBlock()/4, blockFrom.getHeightBlock()/4);
     }
+
 }

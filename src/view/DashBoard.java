@@ -10,6 +10,9 @@
 
 package view;
 
+import model.Port;
+import net.miginfocom.swing.MigLayout;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -20,9 +23,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DashBoard extends JPanel {
-    JFrame frame1 = new JFrame("Block editor");
+    public JFrame frame1 = new JFrame("Block editor");
     public JPanel panel1 = new JPanel();
     public JPanel panel2 ;
+
+    JPanel panel3 = new JPanel();
+    public JPanel panel4 = new JPanel();
+
     JButton lhelp = new JButton();
     JLabel lwelcome = new JLabel();
     JLabel laddion = new JLabel();
@@ -31,22 +38,48 @@ public class DashBoard extends JPanel {
     JLabel ldivision = new JLabel();
     JLabel lrand = new JLabel();
     JLabel lchoose = new JLabel();
-    JButton bcount = new JButton();
-    JButton bload = new JButton();
-    JButton bsave = new JButton();
-    JButton bdebug = new JButton();
+    public JButton bcount = new JButton();
+    public JButton bload = new JButton();
+    public JButton bsave = new JButton();
+    public JButton bdebug = new JButton();
     JLabel lend = new JLabel();
     JLabel lstart = new JLabel();
     JLabel ldown = new JLabel();
     JLabel lup = new JLabel();
     JLabel lleftpan = new JLabel();
     JLabel lback = new JLabel();
+    public ImageIcon iconNo = new ImageIcon("img/if_close_13493.png");
+    public ImageIcon iconYes = new ImageIcon("img/if_check_13491.png");
+
+    // INPUT FORM - MIG LAYOUT
+    public JTextField[] textFieldNameGUI = new JTextField[3];
+    public JTextField[] textFieldValueGUI = new JTextField[3];
+    public JLabel[] labelNameGUI = new JLabel[3];
+    public JLabel[] labelValueGUI = new JLabel[3];
+    public JLabel[] labelIconsGUI = new JLabel[3];
+
+    JLabel lname = new JLabel();
+    public JTextField tname = new JTextField();
+    JLabel lval = new JLabel();
+    public JTextField tval = new JTextField();
+    JLabel label3 = new JLabel();
+    public JTextField textField2 = new JTextField();
+    JLabel label6 = new JLabel();
+    public JTextField textField5 = new JTextField();
+    JLabel label4 = new JLabel();
+    public JTextField textField3 = new JTextField();
+    JLabel label7 = new JLabel();
+    public JTextField textField6 = new JTextField();
+    public JButton bsavePorts = new JButton();
+    public JLabel lstate = new JLabel();
+
     // block on the left, maximum now is 10
     List <JLabel> labelblock = new ArrayList<>();
     //all connections
     List <Connection> connectionsOnDashboard = new ArrayList<>();
 
    // Container frame1ContentPane;
+
 
     /**
      * Method displays a dashboard, needs to know which blocks should be displayed
@@ -68,13 +101,73 @@ public class DashBoard extends JPanel {
                 g2d.setColor(new Color(61,204,199));
                 for (Connection i: connectionsOnDashboard
                      ) {
-                    System.out.println("Draw line: ");
-                    System.out.println(i.cooFrom);
-                    System.out.println(i.cooTo);
+                    //System.out.println("Draw line: ");
+                    //System.out.println(i.cooFrom);
+                    //System.out.println(i.cooTo);
                     g2d.drawLine(i.cooFrom.x,i.cooFrom.y, i.cooTo.x, i.cooTo.y);
                 }
             }
         };
+        //inputPanel();
+        panel4.setBackground(new Color(94, 94, 94));
+        panel4.setLayout(new MigLayout(
+                "fill,hidemode 3",
+                // columns
+                "[fill]" +
+                        "[fill]" +
+                        "[fill]" +
+                        "[fill]" +
+                        "[fill]" +
+                        "[fill]" +
+                        "[fill]" +
+                        "[fill]" +
+                        "[fill]" +
+                        "[fill]",
+                // rows
+                "[]" +
+                        "[]" +
+                        "[]" +
+                        "[]"));
+        panel1.add(panel4);
+
+        int row = 0;
+        int col = 0;
+        for (Integer i = 0; i < 3; i++){
+            textFieldNameGUI[i] = new JTextField();
+            textFieldValueGUI[i] = new JTextField();
+            labelNameGUI[i] = new JLabel();
+            labelValueGUI[i] = new JLabel();
+            labelIconsGUI[i] = new JLabel();
+
+            labelNameGUI[i].setText("Name:");
+           // panel4.add(labelNameGUI[i], "cell " + row + " " + col + " 2 1");
+            panel4.add(labelNameGUI[i], "cell " + row + " " + col );
+            panel4.add(textFieldNameGUI[i], "cell 1 " + i + " 2 1");
+
+            labelValueGUI[i].setText("Value:");
+            panel4.add(labelValueGUI[i], "cell 3 " + i + " 2 1");
+            panel4.add(textFieldValueGUI[i], "cell 5 " + i + " 4 1");
+
+            //label5.setDisabledIcon(new ImageIcon("D:\\Dokumenty_D\\FIT_VUT\\2017-2018\\letni_semestr\\IJA\\projekt\\img\\if_close_13493.png"));
+            //label5.setOpaque(true);
+            //label5.setEnabled(false);
+            labelIconsGUI[i].setBackground(new Color(94, 94, 94));
+            //labelIconsGUI[i].setEnabled(false);
+            panel4.add(labelIconsGUI[i], "cell 9 " + i);
+
+            col += 1;
+
+        }
+        //---- bsavePorts ----
+        bsavePorts.setText("OK");
+        bsavePorts.setBackground(new Color(243, 211, 189));
+
+        panel4.add(bsavePorts, "cell 0 3 2 1");
+
+        lstate.setText("");
+        panel4.add(lstate, "cell 6 3 4 1");
+
+        panel1.add(panel3);
 
         panel2.setOpaque(true);
         panel2.setBackground(new Color(238, 238, 238));
@@ -92,105 +185,6 @@ public class DashBoard extends JPanel {
         panel1.add(lwelcome);
         lwelcome.setBounds(15, 20, 255, 60);
 
-
-        /*
-        //---- laddion ----
-        laddion.setIcon(new ImageIcon("img/addition.png"));
-        panel1.add(laddion);
-        laddion.setBounds(30, 197, 65, 70);
-        laddion.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JLabel lblock = new JLabel();
-                Block addBlock = new Block("add", lblock);
-                generateBlock(addBlock);
-            }
-        });
-        laddion.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                laddion.setToolTipText("Addition block");
-            }
-        });
-
-        //---- linvert ----
-        linvert.setIcon(new ImageIcon("img/invert.png"));
-        panel1.add(linvert);
-        linvert.setBounds(new Rectangle(new Point(200, 200), linvert.getPreferredSize()));
-        linvert.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JLabel lblock = new JLabel();
-                Block invertBlock = new Block("invert", lblock);
-                generateBlock(invertBlock);
-            }
-        });
-        linvert.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                linvert.setToolTipText("Invert block");
-            }
-        });
-
-        //---- lmulti ----
-        lmulti.setIcon(new ImageIcon("img/multiplication.png"));
-        panel1.add(lmulti);
-        lmulti.setBounds(new Rectangle(new Point(115, 200), lmulti.getPreferredSize()));
-        lmulti.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JLabel lblock = new JLabel();
-                Block multiBlock = new Block("multiply", lblock);
-                generateBlock(multiBlock);
-            }
-        });
-        lmulti.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                lmulti.setToolTipText("Multiplication block");
-            }
-        });
-
-
-        //---- ldivision ----
-        ldivision.setIcon(new ImageIcon("img/division.png"));
-        panel1.add(ldivision);
-        ldivision.setBounds(new Rectangle(new Point(115, 290), ldivision.getPreferredSize()));
-        ldivision.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JLabel lblock = new JLabel();
-                Block divisionBlock = new Block("devide", lblock);
-                generateBlock(divisionBlock);
-            }
-        });
-        ldivision.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                ldivision.setToolTipText("Division block");
-            }
-        });
-
-
-        //---- lrand ----
-        lrand.setIcon(new ImageIcon("img/random.png"));
-        panel1.add(lrand);
-        lrand.setBounds(30, 285, 65, 75);
-        lrand.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JLabel lblock = new JLabel();
-                Block randomBlock = new Block("random", lblock);
-                generateBlock(randomBlock);
-            }
-        });
-        lrand.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                lrand.setToolTipText("Random block");
-            }
-        });*/
-
         //---- lchoose ----
         lchoose.setText("Choose a block:");
         lchoose.setForeground(new Color(247, 247, 247));
@@ -199,7 +193,7 @@ public class DashBoard extends JPanel {
         lchoose.setBounds(35, 155, 115, 30);
 
         //---- bcount ----
-        bcount.setText("COUNT");
+        bcount.setText("SOLVE");
         bcount.setForeground(new Color(247, 247, 247));
         bcount.setBackground(new Color(61, 204, 199));
         bcount.setFont(bcount.getFont().deriveFont(bcount.getFont().getSize() + 5f));
@@ -207,7 +201,7 @@ public class DashBoard extends JPanel {
         bcount.setBounds(25, 575, 230, 60);
 
         //---- bload ----
-        bload.setText("LOAD");
+        bload.setText("OPEN");
         bload.setBackground(new Color(61, 204, 199));
         bload.setFont(bload.getFont().deriveFont(bload.getFont().getSize() + 3f));
         bload.addMouseListener(new MouseAdapter() {
@@ -225,12 +219,7 @@ public class DashBoard extends JPanel {
         bsave.setFont(bsave.getFont().deriveFont(bsave.getFont().getSize() + 3f));
         panel1.add(bsave);
         bsave.setBounds(105, 90, 80, 40);
-        bsave.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                //bloadMouseClicked(e);
-            }
-        });
+
 
         //---- bdebug ----
         bdebug.setText("DEBUG");
@@ -333,6 +322,17 @@ public class DashBoard extends JPanel {
         lleftpan.setBounds(0, 0, 295, 670);
 
     }
+    /**
+     * Method actualizes all connection
+     * all connections are found in dashboard.getConnectionsOnDashboard()
+     */
+    public void actualizeAllConnection (){
+        for ( Connection i: getConnectionsOnDashboard()
+                ) {
+            i.actualize();
+        }
+    }
+
     public List<JLabel> getBlocksOnPanel(){
         return this.labelblock;
     }
@@ -387,4 +387,50 @@ public class DashBoard extends JPanel {
         frame1.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame1.setVisible(true);
     }
+
+    public void inputFrameForm(HashMap<Integer, Port> blocksInputPorts){
+
+
+        JButton button1 = new JButton();
+
+        panel3.setLayout(new MigLayout());
+        for(Integer i : blocksInputPorts.keySet()){
+            Port modelPort = blocksInputPorts.get(i);
+            JLabel lportName = new JLabel();
+            lportName.setText(modelPort.getName());
+            panel3.add(lportName, "wrap");
+
+            for( String name : modelPort.getHashOfValue().keySet() ){
+                JLabel lname = new JLabel();
+                lname.setText("Name: ");
+                panel3.add(lname );
+
+
+                JTextField lnameInput = new JTextField(6);
+                lnameInput.setEditable(false);
+                lnameInput.setText(name);
+                panel3.add(lnameInput );
+
+                JLabel lval = new JLabel();
+                lname.setText("Value: ");
+                panel3.add(lval );
+
+                JTextField jTextValue = new JTextField(5);
+                panel3.add(jTextValue, "wrap" );
+
+            }
+        }
+        button1.setText("OK");
+        panel3.add(button1 );
+        button1.setText("OKO");
+        panel3.add(button1 );
+        panel3.setOpaque(true);
+        panel3.setBounds(10, 150, 275, 385);
+        panel3.setBackground(new Color(243, 211, 189));
+        //panel1.add(panel3);
+        //panel3.setBounds(0, 145, 295, 415);
+
+
+    }
+
 }

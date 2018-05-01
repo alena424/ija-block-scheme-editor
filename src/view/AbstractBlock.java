@@ -78,7 +78,7 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
      */
     public void setNPortIn(int NPortX) {
         this.NPortIn = NPortX;
-        System.out.println("It has " + NPortX + "input ports\n");
+        //System.out.println("It has " + NPortX + "input ports\n");
         updateInputPort();
     }
 
@@ -86,7 +86,7 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
      * Method updates input ports according to position of block
      */
     public void updateInputPort(){
-        System.out.println("Updation input ports...\n");
+        //System.out.println("Updation input ports...\n");
         Double divX = ((double)width)/(NPortIn+1);
 
         if ( inputPortPointsHash.isEmpty() ){
@@ -98,7 +98,7 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
                 inputPortPointsHash.put(i,bod);
             }
         } else{
-            System.out.println("List is not empty");
+           // System.out.println("List is not empty");
             for ( int i = 1; i <= NPortIn; i++ ) {
 
                 // index from 1
@@ -106,8 +106,8 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
                 bod.y = y;
                 bod.x = (int) (x + i*divX);
                 inputPortPointsHash.get(i).setLocation( bod);
-                System.out.println("Actualizing to:");
-                System.out.println(bod);
+                //System.out.println("Actualizing to:");
+                //System.out.println(bod);
             }
         }
     }
@@ -115,7 +115,7 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
      * Method updates output ports according to position of block
      */
     public void updateOutputPort(){
-        System.out.println("Updation output ports...\n");
+        //System.out.println("Updation output ports...\n");
         Double div = ((double)width)/(NPortOut+1);
         // adding new port
         if ( outputPortPointsHash.isEmpty() ){
@@ -178,17 +178,17 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
 
          Point minPoint = new Point(x,y);
 
-         System.out.println("Inputports: ");
-         System.out.println(inputPortPointsHash);
+         //System.out.println("Inputports: ");
+         //System.out.println(inputPortPointsHash);
 
-         System.out.println("Outputports: ");
+         //System.out.println("Outputports: ");
 
          Integer idPort = 0;
          Integer poc = 1;
-         System.out.println(outputPortPointsHash);
+         //System.out.println(outputPortPointsHash);
          if ( type == 1 ){
              //input port
-             System.out.println("Input was clicked\n");
+             //System.out.println("Input was clicked\n");
              for (Point i : inputPortPointsHash.values()){
                  double dest = lengthPath(point, i);
                  if (  dest < min ){
@@ -200,7 +200,7 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
              }
          } else {
              //output port
-             System.out.println("Output was clicked\n");
+             //System.out.println("Output was clicked\n");
              for (Point i : outputPortPointsHash.values()){
                  double dest = lengthPath(point, i);
                  if (  dest < min ){
