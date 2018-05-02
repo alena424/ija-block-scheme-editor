@@ -10,24 +10,18 @@
 
 package controller;
 
+
+import model.Block;
 import model.Scheme;
+import view.AbstractBlock;
+import view.Connection;
+import view.DashBoard;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class Execute {
 
-    private Scheme scheme;
-
-    public void Execute( Scheme scheme ) {
-        this.scheme = scheme;
-    }
-
-    public boolean execute() {
-        if ( ! this.scheme.isReadyForExecute() ) {
-            return false;
-        }
-
-        //TODO
-
-        return true;
-    }
 
 }
+
