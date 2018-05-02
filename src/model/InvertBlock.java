@@ -34,7 +34,7 @@ public class InvertBlock extends Block {
         outputPorts.get(1).getHashOfValue().put("Name1", -val1);
 
         outputPorts.get(2).getHashOfValue().put("Name2", -val2);
-        outputPorts.get(2).getHashOfValue().put("Name2", -val3);
+        outputPorts.get(2).getHashOfValue().put("Name3", -val3);
 
     }
 }

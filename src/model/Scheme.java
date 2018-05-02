@@ -134,22 +134,13 @@ public class Scheme {
         }
         return true;
     }
-    // todo nahradit ! za makenewconnectionmodel
-    public boolean createConnection( Port input, Port output ) {
-        if ( ! input.isFree() || ! output.isFree() || input.getType() != output.getType() ) {
-            return true;
-        }
-        Connection newConnection = new Connection( input, output );
-        connectionsOnModel.add(newConnection);
-        this.actualizeLevel();
-        return true;
-    }
-
 
     public model.Connection makeNewConnectionModel(Block blockFrom, Block blockTo, Integer idFromPort, Integer idToPort, Integer typePortFrom){
         // connecting start block with end block
         //System.out.println("new con block from: "+ blockFrom);
         //System.out.println("new con block to: "+ blockTo);
+        Port startPort = null;
+        Port endPort = null;
         if( blockFrom.static_block && blockTo.static_block ){
             System.err.println("Can not connect start block with end block");
             return null;
@@ -163,7 +154,7 @@ public class Scheme {
             if ( blockFrom.getClass().getName().equalsIgnoreCase("model.startblock") ){
                 // startblock was clicked first, need information from blockTo
                 // create new input port, type of connected port
-                Port startPort = new Port(blockTo.getInputPortById(idToPort).getName(),
+                startPort = new Port(blockTo.getInputPortById(idToPort).getName(),
                         blockTo.getInputPortById(idToPort).getHashOfValue());
                 startPort.setOwnerBlock(blockFrom);
                 startPort.setId(idFromPort);
@@ -177,7 +168,7 @@ public class Scheme {
             } else if(  blockTo.getClass().getName().equalsIgnoreCase("model.startblock") ){
                 // startblock was clicked second, need info from blockFrom
 
-                Port startPort = new Port(blockFrom.getInputPortById(idFromPort).getName(),
+                startPort = new Port(blockFrom.getInputPortById(idFromPort).getName(),
                         blockFrom.getInputPortById(idFromPort).getHashOfValue());
                 startPort.setOwnerBlock(blockTo);
                 startPort.setId(idToPort);
@@ -192,7 +183,7 @@ public class Scheme {
 
             if ( blockFrom.getClass().getName().equalsIgnoreCase("model.endblock") ){
                 // get information from blockTo
-                Port endPort = new Port(blockTo.getOutputPortById(idToPort).getName(),
+                endPort = new Port(blockTo.getOutputPortById(idToPort).getName(),
                         blockTo.getOutputPortById(idToPort).getHashOfValue());
                 endPort.setOwnerBlock(blockTo);
                 endPort.setId(idFromPort);
@@ -205,10 +196,10 @@ public class Scheme {
 
             } else if  ( blockTo.getClass().getName().equalsIgnoreCase("model.endblock") ){
                 // info from blockFrom
-                Port endPort = new Port(blockFrom.getOutputPortById(idFromPort).getName(),
+                endPort = new Port(blockFrom.getOutputPortById(idFromPort).getName(),
                         blockFrom.getOutputPortById(idFromPort).getHashOfValue());
                 endPort.setOwnerBlock(blockFrom);
-                endPort.setId(idFromPort);
+                endPort.setId(idToPort);
 
                 //System.out.println("Creating to port of id " + idToPort);
                 if ( blockTo.addinputPort(idToPort,endPort) == false){
@@ -226,7 +217,17 @@ public class Scheme {
                 connModel = new model.Connection(blockFrom.getInputPortById(idFromPort),
                         blockTo.getOutputPortById(idToPort));
             } else {
-                //System.err.println("Ports have different type, can not be connected");
+                //musime odstranit vyrvorene porty, pokud byly nejake vytvorene
+                if ( startPort != null ){
+                    Block portblock = startPort.getBlock();
+                    portblock.removeOutputPort(startPort);
+                    startPort = null;
+                }
+                if ( endPort != null ){
+                    Block portblock = endPort.getBlock();
+                    portblock.removeInputPort(endPort);
+                    endPort = null;
+                }
                 return null;
             }
 
@@ -238,7 +239,17 @@ public class Scheme {
 
             }
             else {
-                // System.err.println("Ports are different types, can not be connected");
+                //musime odstranit vyrvorene porty, pokud byly nejake vytvorene
+                if ( startPort != null ){
+                    Block portblock = startPort.getBlock();
+                    portblock.removeOutputPort(startPort);
+                    startPort = null;
+                }
+                if ( endPort != null ){
+                    Block portblock = endPort.getBlock();
+                    portblock.removeInputPort(endPort);
+                    endPort = null;
+                }
                 return null;
             }
         }
@@ -253,6 +264,7 @@ public class Scheme {
             getConnectionsOnModel().remove(connModel);
             return null;
         }
+
         return connModel;
     }
 
@@ -267,15 +279,13 @@ public class Scheme {
     public Integer getMaxLevelOfOutputPort(Block block){
         Integer maxLevel = 0;
         // projdeme vsechny spojeni, kde je tento block jako input block
-        System.out.println("BB:"+block);
         for( Connection i : connectionsOnModel ){
 
-            System.out.println( "Connin: "+i.getInput().getBlock());
             if ( i.getInput().getBlock() == block ){
                 // block je jako input block
-                System.out.println("Block: "+ block);
+                //System.out.println("Block: "+ block);
                 Block connectedBlock = i.getOutput().getBlock();
-                System.out.println("Connected block: "+ connectedBlock);
+                //System.out.println("Connected block: "+ connectedBlock);
                 if ( connectedBlock.getLevel() > maxLevel ){
                     maxLevel = connectedBlock.getLevel();
                 }
@@ -284,7 +294,6 @@ public class Scheme {
         return maxLevel;
     }
     public void actualizeLevel(){
-        System.out.println("Actuale level: ");
         for ( Block i : modelWorkingBlocks ){
             i.setLevel(getMaxLevelOfOutputPort(i) + 1);
         }
@@ -294,12 +303,8 @@ public class Scheme {
     }
     public boolean detectCycle(){
         // cyklus detekujeme v pripade, ze se vracime bloku, ktery je spojen s podezrelym blokem
-        System.out.println("Detect cycle: ");
-        //Stack<Block> stack = new Stack<Block>();
-        //stack.push(startblock);
         for ( Block actBlock : modelWorkingBlocks ){
             // zjistime nasledniky
-
             Stack<Block> stack = new Stack<Block>();
             for (Port port : actBlock.outputPorts.values()) {
                 Connection connection = port.getConnection();
@@ -316,7 +321,6 @@ public class Scheme {
                     System.err.println("Cycle detected");
                     return true;
                 }
-
                 for (Port port : block.outputPorts.values()) {
                     Connection connection = port.getConnection();
                     if (connection == null) {
@@ -330,72 +334,15 @@ public class Scheme {
         return false;
     }
 
-
-    public void actualizeLevel2() {
-        // toto jsou uzly, na ktere uz jsme nekdy sahali
-        LinkedList<Integer> closedAll = new LinkedList<Integer>();
-        for ( Integer idBlock : this.allBlocks.keySet() ) {
-            // preskocime ty bloky, ktere nemaji volny zadny vstup
-            Block rootBlock = this.allBlocks.get( idBlock );
-            if ( ! rootBlock.isFreeInput() ) {
-                continue;
-            }
-
-            // zasobniky na nove expandovane bloky a jejich predpokladane levely
-            Stack<Block> stack = new Stack<Block>();
-            Stack<Integer> stackLastLevel = new Stack<Integer>();
-            // toto jsou uzly, na ktere jsme sahali u tohoto konkretniho korenoveho bloku
-            LinkedList<Integer> closed = new LinkedList<Integer>();
-
-            Integer actLevel = 0;
-
-            stack.push( rootBlock );
-            stackLastLevel.push( actLevel );
-            while ( ! stackLastLevel.isEmpty() ) {
-                Block actBlock = stack.pop();
-                // jestlize, jsme narazili na nejaky jiz prochazeny uzel, tak jsme nasli cyklus
-                if ( closed.contains( actBlock.getId() ) ) {
-                    this.cycle = true;
-                    return;
-                }
-
-                // vytahnu si level, ktery bych chtel uzlu pridelit
-                actLevel = stackLastLevel.pop();
-                // pokud se na blok uz nekdy sahalo a level neodpovida, tak je chyba v levelovani
-                if ( actBlock.getLevel() != actLevel && closedAll.contains( actBlock.getId() ) ) {
-                    this.levelFault = true;
-                    return;
-                } else if ( actBlock.getLevel() != actLevel ) {
-                    // levely se ruzni a na blok se jeste nesahalo, tak mu nastavime predpokladany level
-                    actBlock.setLevel( actLevel );
-                }
-                // dame blok do closed
-                closed.add( actBlock.getId() );
-                closedAll.add( actBlock.getId() );
-                // expandujeme o vsechny nasledujici bloky
-                for ( Port port : actBlock.outputPorts.values() ) {
-                    Connection connection = port.getConnection();
-                    if ( connection == null ) {
-                        continue;
-                    }
-                    stack.push( connection.getInput().getOwnerBlock() );
-                    stackLastLevel.push( actLevel + 1 );
-                }
-            }
-        }
-        // pokud jsme dosli az sem, tak je vse bez chybicky
-        this.cycle = false;
-        this.levelFault = false;
-    }
     public boolean checkScheme(){
         // zkontrolujeme, jestli vsechny vstupy maji vystupy a obracene
         for ( Block i : modelWorkingBlocks ){
             if ( i.isFreeInput() ){
-                System.out.println("IN" + i);
+                //System.out.println("IN" + i);
                 return false;
             }
             if ( i.isFreeOutput() ){
-                System.out.println("OUT" + i);
+                //System.out.println("OUT" + i);
                 return false;
             }
         }

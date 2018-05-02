@@ -32,12 +32,12 @@ public class AdditionBlock extends Block {
        Double sum = 0.0;
         //double[] sum = new double[ this.input[i].getHashOfValue().size() ];
         for ( Integer portId : inputPorts.keySet() ) {
-            System.out.println("Portid: " + portId);
+            //System.out.println("Portid: " + portId);
             //HashMap<Integer, Port> ports = new HashMap<Integer, Port>(this.inputPorts.get( i ));
             for ( String name : inputPorts.get(portId).getHashOfValue().keySet() ) {
 
                 sum += this.inputPorts.get(portId).getHashOfValue().get(name);
-                System.out.println("Sum: " + sum);
+                //System.out.println("Sum: " + sum);
             }
         }
         // nastavim output port

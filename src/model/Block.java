@@ -35,8 +35,6 @@ public abstract class Block {
    // protected Scheme scheme;
 
     public Block (HashMap<Integer,Port> inputPortsPorts, HashMap<Integer,Port> outputPortsPorts) {
-        System.out.println(inputPortsPorts);
-        System.out.println(outputPortsPorts);
         inputPorts = new HashMap<Integer, Port>(inputPortsPorts);
         outputPorts = new HashMap<Integer, Port>(outputPortsPorts);
         // set all ports to this block
@@ -46,13 +44,6 @@ public abstract class Block {
         for (Integer i : outputPorts.keySet()){
             outputPorts.get(i).setOwnerBlock(this);
         }
-        
-        //Integer newId = scheme.getMaxId();
-        //this.id = newId;
-        //this.level = level;
-       // this.scheme = scheme;
-
-        //scheme.addBlock( this );
     }
 
     protected Block() {
@@ -162,7 +153,7 @@ public abstract class Block {
         return false;
     }
     public void removeInputPort(Port port){
-        System.out.println(port.getId());
+        //System.out.println(port.getId());
         inputPorts.remove(port.getId());
     }
     public void removeOutputPort(Port port){

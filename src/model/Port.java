@@ -29,7 +29,7 @@ public class Port {
             value.put(nameVal, hashvalue.get(nameVal));
 
         }
-        System.out.println(hashvalue);
+        //System.out.println(hashvalue);
         //this.id = id;
         //this.type = type;
         //this.ownerBlock = ownerBlock;

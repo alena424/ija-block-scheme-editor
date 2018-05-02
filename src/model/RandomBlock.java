@@ -30,8 +30,14 @@ public class RandomBlock extends Block {
         Double val = inputPorts.get(1).getHashOfValue().get("Name1");
 
         // nastavim output port
-        outputPorts.get(1).getHashOfValue().put("Name2", val+rand.nextInt(10) );
-        outputPorts.get(1).getHashOfValue().put("Name3", val+rand.nextInt(10));
+        // nastavim output port
+        outputPorts.get(1).getHashOfValue().put("Name1",val+rand.nextInt(10) );
+
+        outputPorts.get(2).getHashOfValue().put("Name2",val+rand.nextInt(10) );
+        outputPorts.get(2).getHashOfValue().put("Name3", val+rand.nextInt(10) );
+
+        //outputPorts.get(1).getHashOfValue().put("Name2", val+rand.nextInt(10) );
+        //outputPorts.get(1).getHashOfValue().put("Name3", val+rand.nextInt(10));
 
     }
 }

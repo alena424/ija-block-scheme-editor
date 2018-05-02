@@ -30,8 +30,9 @@ public class DivisionBlock extends Block {
         Double divider = inputPorts.get(1).getHashOfValue().get("Name1");
 
         if ( divider == 0 ){
-            System.err.println("Can not devide by zero");
-            return;
+            throw new ArithmeticException("Dividing by zero is not allowed");
+            //System.err.println("Can not devide by zero");
+            //return;
         }
         Double val1 = inputPorts.get(2).getHashOfValue().get("Name2");
         Double val2 = inputPorts.get(2).getHashOfValue().get("Name3");
