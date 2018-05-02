@@ -30,7 +30,7 @@ public class DashBoard extends JPanel {
     JPanel panel3 = new JPanel();
     public JPanel panel4 = new JPanel();
 
-    JButton lhelp = new JButton();
+    public JButton lhelp = new JButton();
     JLabel lwelcome = new JLabel();
     JLabel laddion = new JLabel();
     JLabel linvert = new JLabel();
@@ -50,6 +50,7 @@ public class DashBoard extends JPanel {
     JLabel lback = new JLabel();
     public ImageIcon iconNo = new ImageIcon("img/if_close_13493.png");
     public ImageIcon iconYes = new ImageIcon("img/if_check_13491.png");
+    public ImageIcon iconDef = new ImageIcon("img/default_check.png");
 
     // INPUT FORM - MIG LAYOUT
     public JTextField[] textFieldNameGUI = new JTextField[3];
@@ -77,10 +78,6 @@ public class DashBoard extends JPanel {
     List <JLabel> labelblock = new ArrayList<>();
     //all connections
     List <Connection> connectionsOnDashboard = new ArrayList<>();
-
-   // Container frame1ContentPane;
-
-
     /**
      * Method displays a dashboard, needs to know which blocks should be displayed
      */
@@ -101,9 +98,6 @@ public class DashBoard extends JPanel {
                 g2d.setColor(new Color(61,204,199));
                 for (Connection i: connectionsOnDashboard
                      ) {
-                    //System.out.println("Draw line: ");
-                    //System.out.println(i.cooFrom);
-                    //System.out.println(i.cooTo);
                     g2d.drawLine(i.cooFrom.x,i.cooFrom.y, i.cooTo.x, i.cooTo.y);
                 }
             }
@@ -228,20 +222,6 @@ public class DashBoard extends JPanel {
         panel1.add(bdebug);
         bdebug.setBounds(195, 90, 80, 40);
 
-        //---- lend ----
-        //lend.setIcon(new ImageIcon("img/equals.png"));
-        //panel1.add(lend);
-        //lend.setBounds(new Rectangle(new Point(600, 575), lend.getPreferredSize()));
-       // EndBlock endblock = new EndBlock("end", lend);
-       // generateBlock(endblock );
-
-        //---- lstart ----
-        //lstart.setIcon(new ImageIcon( "img/minus.png") );
-        //panel1.add(lstart);
-        //lstart.setBounds(new Rectangle(new Point(600, 40), lstart.getPreferredSize()));
-        //StartBlock startblock = new StartBlock("start", lstart);
-        //generateBlock(startblock );
-
         //---- lhelp ----
         lhelp.setText("HELP");
         lhelp.setBackground(new Color(61, 204, 199));
@@ -276,7 +256,6 @@ public class DashBoard extends JPanel {
         Integer Y = 200;
 
         Integer i = 0; // counter for block placed in left panel
-        System.out.println(factoreblock);
         int counter = 0; // counter global from 0 ..
         for ( model.Block block : factoreblock ){
             if ( i % 3 == 0 && i != 0){
@@ -285,7 +264,7 @@ public class DashBoard extends JPanel {
             }
             //JLabel label = new JLabel();
             labelblock.add( new JLabel() );
-            System.out.println(block.getName());
+            //System.out.println(block.getName());
 
             labelblock.get(counter).setIcon(block.getIcon());
             labelblock.get(counter).setText( block.getName());
@@ -300,7 +279,6 @@ public class DashBoard extends JPanel {
             });
 
             if ( block.static_block){
-                //System.out.println("static");
                 //labelblock.get(counter).setBounds(block.static_x, block.static_y, width, height);
             } else{
                 labelblock.get(counter).setBounds(X, Y, width, height);
@@ -357,12 +335,6 @@ public class DashBoard extends JPanel {
     }
 
     public void setVisible() {
-        //---- lback ----
-        /*lback.setText("text");
-        lback.setOpaque(true);
-        lback.setBackground(new Color(252, 250, 249));
-        panel1.add(lback);
-        lback.setBounds(0, 0, 1000, 670);*/
 
         Container frame1ContentPane = frame1.getContentPane();
         frame1ContentPane.setLayout(null);
@@ -386,51 +358,6 @@ public class DashBoard extends JPanel {
         frame1.setLocationRelativeTo(frame1.getOwner());
         frame1.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame1.setVisible(true);
-    }
-
-    public void inputFrameForm(HashMap<Integer, Port> blocksInputPorts){
-
-
-        JButton button1 = new JButton();
-
-        panel3.setLayout(new MigLayout());
-        for(Integer i : blocksInputPorts.keySet()){
-            Port modelPort = blocksInputPorts.get(i);
-            JLabel lportName = new JLabel();
-            lportName.setText(modelPort.getName());
-            panel3.add(lportName, "wrap");
-
-            for( String name : modelPort.getHashOfValue().keySet() ){
-                JLabel lname = new JLabel();
-                lname.setText("Name: ");
-                panel3.add(lname );
-
-
-                JTextField lnameInput = new JTextField(6);
-                lnameInput.setEditable(false);
-                lnameInput.setText(name);
-                panel3.add(lnameInput );
-
-                JLabel lval = new JLabel();
-                lname.setText("Value: ");
-                panel3.add(lval );
-
-                JTextField jTextValue = new JTextField(5);
-                panel3.add(jTextValue, "wrap" );
-
-            }
-        }
-        button1.setText("OK");
-        panel3.add(button1 );
-        button1.setText("OKO");
-        panel3.add(button1 );
-        panel3.setOpaque(true);
-        panel3.setBounds(10, 150, 275, 385);
-        panel3.setBackground(new Color(243, 211, 189));
-        //panel1.add(panel3);
-        //panel3.setBounds(0, 145, 295, 415);
-
-
     }
 
 }

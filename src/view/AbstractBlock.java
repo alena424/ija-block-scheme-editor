@@ -23,6 +23,8 @@ import static java.lang.StrictMath.sqrt;
 
 public class AbstractBlock implements MouseListener, MouseMotionListener{
         public String path; // path to icon with represents block
+        ImageIcon selectedIconImg;
+        ImageIcon iconImg;
         public String selectedPath; // path to icon with represents a selected block
         public HashMap<String,String> identification = new HashMap<String, String>(); // all paths to blocks
 
@@ -178,17 +180,10 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
 
          Point minPoint = new Point(x,y);
 
-         //System.out.println("Inputports: ");
-         //System.out.println(inputPortPointsHash);
-
-         //System.out.println("Outputports: ");
-
          Integer idPort = 0;
          Integer poc = 1;
-         //System.out.println(outputPortPointsHash);
          if ( type == 1 ){
              //input port
-             //System.out.println("Input was clicked\n");
              for (Point i : inputPortPointsHash.values()){
                  double dest = lengthPath(point, i);
                  if (  dest < min ){
@@ -200,12 +195,10 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
              }
          } else {
              //output port
-             //System.out.println("Output was clicked\n");
              for (Point i : outputPortPointsHash.values()){
                  double dest = lengthPath(point, i);
                  if (  dest < min ){
                      min = dest;
-                     //minPoint = i;
                      idPort = poc;
                  }
                  poc++;
@@ -222,8 +215,17 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
         this.identification.put( identif, path);
     }
 
+    public ImageIcon getSelectedIconImg() {
+        return selectedIconImg;
+    }
+
+    public ImageIcon getIconImg() {
+        return iconImg;
+    }
+
     public void setSelectedPath(String selectedPath) {
         this.selectedPath = selectedPath;
+        selectedIconImg = new ImageIcon(selectedPath);
     }
 
     public void setName(String name) {
@@ -232,6 +234,7 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
 
     public void setPath(String path) {
         this.path = path;
+        iconImg = new ImageIcon(path);
     }
 
     public void setX(Integer x) {
