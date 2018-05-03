@@ -169,18 +169,6 @@
     <pathelement location="${basedir}/lib/miglayout-core.jar"/>
     <pathelement location="${basedir}/lib/miglayout-swing.jar"/>
   </path>
-  <!-- Register Custom Compiler Taskdefs -->
-  <property name="javac2.home" value="${idea.home}/lib"/>
-  <path id="javac2.classpath">
-    <pathelement location="${javac2.home}/javac2.jar"/>
-    <pathelement location="${javac2.home}/jdom.jar"/>
-    <pathelement location="${javac2.home}/asm-all.jar"/>
-    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
-  </path>
-  <target name="register.custom.compilers">
-    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
-    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
-  </target>
   
   <!-- Modules -->
   
@@ -263,15 +251,15 @@
   
   <target name="compile.module.projekt" depends="compile.module.projekt.production,compile.module.projekt.tests" description="Compile module projekt"/>
   
-  <target name="compile.module.projekt.production" depends="register.custom.compilers" description="Compile module projekt; production classes">
+  <target name="compile.module.projekt.production" description="Compile module projekt; production classes">
     <mkdir dir="${projekt.output.dir}"/>
-    <javac2 destdir="${projekt.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.projekt}/javac">
+    <javac destdir="${projekt.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.projekt}/javac">
       <compilerarg line="${compiler.args.projekt}"/>
       <bootclasspath refid="projekt.module.bootclasspath"/>
       <classpath refid="projekt.module.production.classpath"/>
       <src refid="projekt.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.projekt"/>
-    </javac2>
+    </javac>
     
     <copy todir="${projekt.output.dir}">
       <fileset dir="${module.projekt.basedir}/src">
@@ -281,7 +269,7 @@
     </copy>
   </target>
   
-  <target name="compile.module.projekt.tests" depends="register.custom.compilers,compile.module.projekt.production" description="compile module projekt; test classes" unless="skip.tests"/>
+  <target name="compile.module.projekt.tests" depends="compile.module.projekt.production" description="compile module projekt; test classes" unless="skip.tests"/>
   
   <target name="clean.module.projekt" description="cleanup module">
     <delete dir="${projekt.output.dir}"/>
