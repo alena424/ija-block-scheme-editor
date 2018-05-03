@@ -12,7 +12,7 @@ Michal Dobes <xdobes13@stud.fit.vutbr.cz>
 <target name="run" depends="generate-build,generate-jar">
 <java classname="controller.Program" fork="true">
 <classpath>
-<path location="dest/ija2013.jar"/>
+<path location="dest/ija2018.jar"/>
 <!--<path location="dest/hamcrest-core-1.3.jar"/>-->
 </classpath>
 </java>
@@ -22,8 +22,10 @@ Michal Dobes <xdobes13@stud.fit.vutbr.cz>
 <mkdir dir="build"/>
 <javac srcdir="src" destdir="build" encoding="UTF-8" includeantruntime="false">
 <classpath>
+
+<path refid="library.miglayout.classpath"/>
 <fileset dir="lib">
-<include name="*.jar"/>
+<include name="**/*.jar"/>
 </fileset>
 </classpath>
 </javac>
@@ -39,12 +41,13 @@ Michal Dobes <xdobes13@stud.fit.vutbr.cz>
 <target name="generate-jar">
 <mkdir dir="dest"/>
 <copy file="lib/hamcrest-core-1.3.jar" todir="dest" />
-<jar jarfile="dest/ija2013.jar" basedir="build" compress="true">
+<jar jarfile="dest/ija2018.jar" basedir="build" compress="true">
 <manifest>
+
 <attribute name="Main-Class" value="controller.Program"/>
 <attribute name="Class-Path" value="hamcrest-core-1.3.jar"/>
 </manifest>
-<!--<zipgroupfileset dir="lib" includes="*.jar" />-->
+<zipgroupfileset dir="lib" includes="*.jar" />
 </jar>
 </target>
 
