@@ -20,10 +20,13 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.nio.charset.Charset;
 
+/**
+ * Class for loading file
+ */
 public class Loader implements ActionListener {
-    JFrame mainframe;
+    JFrame mainframe; // main frame
     private JTextField filename = new JTextField(), dir = new JTextField();
-    Program program;
+    Program program; // instance of program
 
     public Loader(JFrame frame, Program program){
         mainframe = frame;
@@ -33,7 +36,6 @@ public class Loader implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JFileChooser c = new JFileChooser();
-        // Demonstrate "Open" dialog:
         int rVal = c.showOpenDialog(mainframe);
         if (rVal == JFileChooser.APPROVE_OPTION) {
             filename.setText(c.getSelectedFile().getName());
@@ -60,9 +62,6 @@ public class Loader implements ActionListener {
             program.clearCanvas();
 
             String[] myBlocks = blocks.split("#");
-            //System.out.println("Block: " + myBlocks[0]);
-            //System.out.println("Block1: " + myBlocks[1]);
-            //System.out.println(myBlocks.toString());
             for (String strIn : myBlocks){
 
                 String line[] = strIn.split("\\|");
@@ -73,12 +72,9 @@ public class Loader implements ActionListener {
                  * width
                  */
                 model.Block block = program.getBlockByName(line[0]);
-                //System.out.println("Loader: generatng block" + block);
                 if ( ! block.getName().equalsIgnoreCase("start") && ! block.getName().equalsIgnoreCase("end") ) {
 
                     view.AbstractBlock blockView = program.generateBlock(block);
-                    //System.out.println(blockView.getYBlock());
-
                     blockView.setX(Integer.parseInt(line[1]));
                     blockView.setY(Integer.parseInt(line[2]));
                     blockView.setHeight(Integer.parseInt(line[3]));
@@ -105,19 +101,13 @@ public class Loader implements ActionListener {
                  */
                 // musime najit view block, ktery odpovida souradnicim
 
-                view.AbstractBlock vBlockFrom = program.getViewBlockAccrodingToCoordinate(Integer.parseInt(line[6]), Integer.parseInt(line[7]));
+                view.AbstractBlock vBlockFrom = program.getViewBlockAccordingToCoordinate(Integer.parseInt(line[6]), Integer.parseInt(line[7]));
 
-                view.AbstractBlock vBlockTo = program.getViewBlockAccrodingToCoordinate(Integer.parseInt(line[8]), Integer.parseInt(line[9]));
-                //System.out.println("Block from: " + vBlockFrom + " Block to: " + vBlockTo);
-
+                view.AbstractBlock vBlockTo = program.getViewBlockAccordingToCoordinate(Integer.parseInt(line[8]), Integer.parseInt(line[9]));
                 Point connPointFrom = new Point(Integer.parseInt(line[0]) - vBlockFrom.getXBlock() ,
                         Integer.parseInt(line[1]) - vBlockFrom.getYBlock() );
-               // System.out.println(connPointFrom);
-
                 Point connPointTo = new Point(Integer.parseInt(line[2]) - vBlockTo.getXBlock() ,
                          Integer.parseInt(line[3]) - vBlockTo.getYBlock()  );
-                //System.out.println(connPointTo);
-
                 vBlockFrom.setLeftClickedLast(connPointFrom);
                 vBlockTo.setLeftClickedLast(connPointTo);
                 program.selectedBlock.add(vBlockFrom);
@@ -128,6 +118,5 @@ public class Loader implements ActionListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

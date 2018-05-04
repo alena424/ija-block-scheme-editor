@@ -4,55 +4,36 @@ import model.Block;
 import model.FactoryBlock;
 import model.Port;
 import model.Scheme;
-import org.junit.Assert;
-import org.w3c.dom.events.Event;
 import view.AbstractBlock;
 import view.Connection;
 import view.DashBoard;
 import view.Help;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import java.lang.reflect.Array;
 import java.util.*;
-
 import java.io.IOException;
-
 import java.util.ArrayList;
-
 import java.util.List;
-//import java.util.Timer;
-
-
 import static java.lang.Math.abs;
-import static java.lang.Thread.*;
 
 public class Program {
 
-    Scheme newScheme = new Scheme(1); // new shceme
+    private Scheme newScheme = new Scheme(1); // new shceme
     public DashBoard dashboard; // new dashboard
-    List <Block> factoreBlocks; // modelBlock created blocks
-    List<JLabel> panelBlocks; // blocks on the left side, generates working blocks
-
-    List<view.AbstractBlock> viewWorkingBlocks; // blocks on main canvas to work with in VIEW
-    //List<model.Block> modelWorkingBlocks; // blocks on main canvas to work with in MODEL
-
-    List<view.AbstractBlock> selectedBlock; //selected blocks, maximum is 2 blocks
-    List<view.AbstractBlock> debugSelectedBlock; // selected block of one step
-
-    //List<Connection> connectionsList = new ArrayList<>();
-    HashMap<view.AbstractBlock,model.Block> viewToModelBlocks = new HashMap<AbstractBlock,Block>();
-    model.Connection chosenConn = null;
-    Integer actualDebugLevel = 1;
-    Map<Integer, List> blocksForLevel = new TreeMap<>();
-
+    private List <Block> factoreBlocks; // modelBlock created blocks
+    private List<JLabel> panelBlocks; // blocks on the left side, generates working blocks
+    private List<view.AbstractBlock> viewWorkingBlocks; // blocks on main canvas to work with in VIEW
+    public List<view.AbstractBlock> selectedBlock; //selected blocks, maximum is 2 blocks
+    private List<view.AbstractBlock> debugSelectedBlock; // selected block of one step
+    public HashMap<view.AbstractBlock,model.Block> viewToModelBlocks = new HashMap<AbstractBlock,Block>();
+    private model.Connection chosenConn = null; // clicked connection
+    private Integer actualDebugLevel = 1;
+    private Map<Integer, List> blocksForLevel = new TreeMap<>(); // all blocks with levels
     public Program(){
-
     }
 
     public HashMap<AbstractBlock, Block> getViewToModelBlocks() {
@@ -63,8 +44,6 @@ public class Program {
      * Method creates types of block (appears in left panel)
      */
     public void createBlocks(){
-
-
         // DEFINE 3 TYPES OF PORT
         HashMap<String,Double> pomHash = new HashMap<>();
         pomHash.put("Name1", 0.0);
@@ -83,15 +62,10 @@ public class Program {
 
         HashMap<Integer,Port> blocksInputPorts = new HashMap<Integer,Port>();
         HashMap<Integer,Port> blocksOutputPorts = new HashMap<Integer,Port>();
-        //System.out.println("Create:");
-        //System.out.println(blocksInputPorts);
-        //System.out.println(blocksOutputPorts);
-        //List blocksOutputPorts = new ArrayList();
 
-        // CREATING BLOCKS
+        // CREATING BLOCKS - 5 types of block
         newScheme.factorBlock("Start", blocksInputPorts, blocksOutputPorts);
         newScheme.factorBlock("End", blocksInputPorts, blocksOutputPorts);
-
 
         //3 INPUTS
         blocksInputPorts.put(1,port1);
@@ -116,11 +90,8 @@ public class Program {
         HashMap<Integer,Port> blocksOutputPorts3 = new HashMap<Integer,Port>();
         // 1 IN 2, OUT
         blocksInputPorts3.put(1,port1);
-
         blocksOutputPorts3.put(1,port1);
         blocksOutputPorts3.put(2,port2);
-
-
         newScheme.factorBlock("Random",blocksInputPorts3,blocksOutputPorts3);
 
         HashMap<Integer,Port> blocksInputPorts4 = new HashMap<Integer,Port>();
@@ -135,18 +106,15 @@ public class Program {
         HashMap<Integer,Port> blocksOutputPorts5 = new HashMap<Integer,Port>(blocksOutputPorts4);
 
         newScheme.factorBlock("Division",blocksInputPorts5,blocksOutputPorts5);
-
-
     }
 
     /**
-     *
-     * @param i
-     * @param event
+     * Method returns output port by out block from connection
+     * @param i connection from which we take ourput block
      * @param type 1 - we want output port, 2 - we want input port
-     * @return
+     * @return output port by out block
      */
-    public model.Port getLineAccordingToCoordinates(Connection i, MouseEvent event, Integer type){
+    public model.Port getLineAccordingToCoordinates(Connection i, Integer type){
             if( i.getTypeFrom() == type){
                 // from is input, we want output
                 return viewToModelBlocks.get(i.getBlockTo()).getOutputPortById(i.getidToPort());
@@ -157,22 +125,24 @@ public class Program {
             }
     }
 
+    /**
+     * Run program
+     */
     public void run(){
+        // blocks on left panel
         createBlocks();
-
+        // creating dashboard
         dashboard = new DashBoard();
-
-
+        // of we clicks whereever on panel2, all selected blocks or connections should be unselected
+        // in addition to it, we stop debugging
         dashboard.panel2.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 distroySelectedBlocks();
-                //dashboard.panel4.setVisible(false);
                 distroyDebugSelectedBlocks();
                 actualDebugLevel = 1;
                 dashboard.panel4.setSize(0,0);
-
             }
         });
 
@@ -182,13 +152,13 @@ public class Program {
         dashboard.getBlocksOnLeft(newScheme.getFactoreBlock());
         // save blocks in left panel in panelBlocks
         panelBlocks = dashboard.getBlocksOnPanel();
-
         //initialize array of view and model blocks
         viewWorkingBlocks = new ArrayList<>();
 
         // special inicialization for start and end block
         initFactoryBlock(newScheme.getfactoreBlockByName("Start"), newScheme.getfactoreBlockByName("End"));
 
+        //LOAD, SAVE, NEW
         dashboard.bload.addActionListener(new Loader(dashboard.frame1, this));
         dashboard.bsave.addActionListener(new Saver(dashboard.frame1, this));
         dashboard.bdebug.addActionListener(new ActionListener() {
@@ -203,6 +173,7 @@ public class Program {
                 clearCanvas();
             }
         });
+        // HELP
         dashboard.lhelp.addActionListener(new Help(this));
 
         for (JLabel lab: panelBlocks
@@ -215,13 +186,11 @@ public class Program {
             lab.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    //System.out.println("Clicked block:" + block);
                     generateBlock(block);
-
                 }
-
             });
         }
+        // COUNT
         dashboard.bcount.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -230,8 +199,11 @@ public class Program {
             }
         });
         dashboard.setVisible();
-
     }
+
+    /**
+     * One step of computation
+     */
     public void debugProgramStep(){
         int end = 0;
         actualizeBlocksForLevel();
@@ -249,29 +221,32 @@ public class Program {
                     end = 1;
                 }
 
-                //viewBlock.labelBlock.setIcon(viewBlock.getSelectedIconImg());
                 try {
                     actBlock.execute();
                 } catch (Exception ext){
+                    // we catch error in case of for example dividing by zero
                     JOptionPane.showMessageDialog(dashboard.frame1,ext.getMessage());
                 }
+                // transfer output to input
                 executeConnectionToBlock(actBlock);
-
             }
-
         }
-
         if ( end == 1){
+            // debug or computing has ended
             actualDebugLevel = 0;
-            JOptionPane.showMessageDialog(dashboard.frame1,"Debug has finished");
+            JOptionPane.showMessageDialog(dashboard.frame1,"Computation has finished");
             distroyDebugSelectedBlocks();
         } else {
+            // raise debug level
             actualDebugLevel++;
         }
-
     }
+
+    /**
+     * Method deletes a model block
+     * @param block model to delete
+     */
     protected void deleteModelBlock(model.Block block){
-        //System.out.println("deleting model ");
         newScheme.modelWorkingBlocks.remove(block);
         block = null;
     }
@@ -293,6 +268,12 @@ public class Program {
         viewToModelBlocks.remove(block);
         block = null;
     }
+
+    /**
+     * Method finds all connections belonging to block and deletes them
+     * @param block block that will be deleted
+     * @return
+     */
     public boolean deleteConnectionModel(AbstractBlock block){
         Block blockToDelete = viewToModelBlocks.get(block);
         List<model.Connection> toRemoveConnection = new ArrayList<>();
@@ -307,21 +288,22 @@ public class Program {
             rem.getInput().setFree();
             rem.getOutput().setFree();
 
-
             // co kdyz se jedna o start block nebo end block?
             if ( rem.getOutput().getBlock().static_block ){
-                //System.out.println("removeOUT");
                 rem.getOutput().getBlock().removeOutputPort(rem.getOutput());
             }
             if ( rem.getInput().getBlock().static_block ){
-                //System.out.println("removeIN");
                 rem.getInput().getBlock().removeInputPort(rem.getInput());
             }
             deleteConnectionSingleLineModel(rem);
-
         }
         return true;
     }
+
+    /**
+     * Function finds all VIEW connections belonging to block and deletes them
+     * @param block blong that will be deleted
+     */
     public void deleteViewConnection(AbstractBlock block){
         List<Connection> toRemoveConnection = new ArrayList<>();
         for (Connection i: dashboard.getConnectionsOnDashboard()
@@ -334,9 +316,12 @@ public class Program {
                 ) {
             deleteConnectionSingleLineView(r);
         }
-        //dashboard.panel2.repaint();
-
     }
+
+    /**
+     * Method deletes one given VIEW connection
+     * @param r view connection that will be deleted
+     */
     public void deleteConnectionSingleLineView(Connection r){
         // VIEW
         dashboard.getConnectionsOnDashboard().remove(r);
@@ -346,6 +331,10 @@ public class Program {
         dashboard.panel4.setSize(0,0);
         dashboard.panel2.repaint();
     }
+    /**
+     * Method deletes one given MODEL connection
+     * @param rem model connection that will be deleted
+     */
     public void deleteConnectionSingleLineModel(model.Connection rem){
         // MODEL
         newScheme.getConnectionsOnModel().remove(rem);
@@ -368,7 +357,7 @@ public class Program {
     }
 
     /**
-     * Inicialized start and end block
+     * Method initializes start and end block
      * @param start start block
      * @param end end block
      */
@@ -380,7 +369,7 @@ public class Program {
 
     /**
      * Method initializes port according to given hash
-     * @param port according to this hash we create real port usinf new
+     * @param port according to this hash we create real port using new
      * @return ports of block in hashmap
      */
     public HashMap<Integer,Port> createPortsToBlock(HashMap<Integer,Port> port){
@@ -396,7 +385,6 @@ public class Program {
                 newPortModel.put(entry.getKey(),newPort);
             }
         }
-
         return newPortModel;
     }
 
@@ -424,55 +412,62 @@ public class Program {
             }
 
         } else {
+            // VIEW BLOCK
             addViewBlock = new view.Block(block.getName(), lblock);
             // drag and drop
             lblock.addMouseMotionListener(new MouseAdapter() {
                 @Override
                 public void mouseDragged(MouseEvent event) {
-                    //super.mouseDragged(e);
+                    Integer pomX = 0;
+                    Integer pomY = 0;
+
                     if ( event.getComponent().getY() <= 0 && event.getComponent().getX() <= 0 ){
-                        event.getComponent().setLocation(abs(event.getX()+event.getComponent().getX()-addViewBlock.getXBlock()),
-                                abs(event.getY()+event.getComponent().getY()-addViewBlock.getYBlock()) );
+                        pomX =  abs(event.getX()+event.getComponent().getX()-addViewBlock.clickPosition.x);
+                        pomY =  abs(event.getY()+event.getComponent().getY()-addViewBlock.clickPosition.y);
                     } else if ( event.getComponent().getX() > 660 ) {
-                        event.getComponent().setLocation(660,   event.getY()+event.getComponent().getY()-addViewBlock.getYBlock());
+                        pomX =  600;
+                        pomY =  abs(event.getY()+event.getComponent().getY()-addViewBlock.clickPosition.y);
                     } else if ( event.getComponent().getY() > 550 ) {
-                        event.getComponent().setLocation(event.getX()+event.getComponent().getX()-addViewBlock.getXBlock(),   550);
+                        pomX =  abs(event.getX()+event.getComponent().getX()-addViewBlock.clickPosition.x);
+                        pomY =  550;
                     } else {
-                        event.getComponent().setLocation(abs(event.getX()+event.getComponent().getX()-addViewBlock.getXBlock()),
-                                abs(event.getY()+event.getComponent().getY()-addViewBlock.getYBlock()) );
+                        pomX =  abs(event.getX()+event.getComponent().getX()-addViewBlock.clickPosition.x);
+                        pomY =  abs(event.getY()+event.getComponent().getY()-addViewBlock.clickPosition.y);
+                    }
+                    event.getComponent().setLocation(pomX,pomY);
+                    addViewBlock.setX(pomX);
+                    addViewBlock.setY(pomY);
+                    // update connections (lines)
+                    if ( ! dashboard.getConnectionsOnDashboard().isEmpty() ){
+                        dashboard.actualizeAllConnection();
+                        dashboard.panel2.repaint();
                     }
                 }
-
             });
+
             // after release, we need to update coordinates of port and connections
             lblock.addMouseListener(new MouseAdapter() {
                   @Override
                   public void mouseReleased(MouseEvent event) {
-
-                      addViewBlock.setX( event.getX()+event.getComponent().getX()-addViewBlock.getXBlock() );
-                      addViewBlock.setY( event.getY()+event.getComponent().getY()-addViewBlock.getYBlock() );
-
-
+                      addViewBlock.setX( event.getX()+event.getComponent().getX()-addViewBlock.clickPosition.x );
+                      addViewBlock.setY( event.getY()+event.getComponent().getY()-addViewBlock.clickPosition.y );
                       if ( ! dashboard.getConnectionsOnDashboard().isEmpty() ){
-
                           dashboard.actualizeAllConnection();
                           dashboard.panel2.repaint();
                       }
                   }
               });
         }
-
         viewWorkingBlocks.add(addViewBlock);
 
         // CREATING MODEL BLOCK
-
         // define all ports to block
         HashMap<Integer, Port> inputPortsModel = createPortsToBlock( block.getInputPorts());
-        //System.out.println("Init output port" + block.getOutputPorts());
         HashMap<Integer, Port> outputPortsModel = createPortsToBlock( block.getOutputPorts());
         model.Block addModelBlock = factoryBlock.getBlock
                 (block.getName(), inputPortsModel, outputPortsModel);
 
+        // we want to remember start block
         if ( block.getName().equalsIgnoreCase("start") ){
             newScheme.startblock = addModelBlock;
         }
@@ -485,6 +480,7 @@ public class Program {
         selectedBlock = new ArrayList<>();
         debugSelectedBlock = new ArrayList<>();
 
+        // sets information to view block
         addViewBlock.setPath(block.getPathOfIcon());
         addViewBlock.setName(block.getName());
 
@@ -550,6 +546,12 @@ public class Program {
         return addViewBlock;
 
     }
+
+    /**
+     * Method format string with information about ports
+     * @param ports port to get information from
+     * @return string with information
+     */
     public String formatPortsToString(HashMap<Integer,Port> ports){
         String final_str = "";
         for( Integer i : ports.keySet() ){
@@ -557,18 +559,19 @@ public class Program {
         }
         return final_str;
     }
+
+    /**
+     * Method deletes all model and view blocks and their connections (except start and end block)
+     */
     public void clearCanvas(){
         // vsechno smazeme
         actualDebugLevel = 1;
         for (view.AbstractBlock vblock : viewToModelBlocks.keySet()){
-
                 Block mblock = viewToModelBlocks.get(vblock);
                 deleteModelBlock(mblock);
                 dashboard.panel2.remove(vblock.labelBlock);
                 // delete connection connected to block if there is just one
                 deleteConnection(vblock);
-                //viewWorkingBlocks
-
         }
         dashboard.panel2.validate();
         dashboard.panel2.repaint();
@@ -576,11 +579,10 @@ public class Program {
         viewToModelBlocks.clear();
         // special inicialization for start and end block
         initFactoryBlock(newScheme.getfactoreBlockByName("Start"), newScheme.getfactoreBlockByName("End"));
-
     }
 
     /**
-     * Method makes new connection
+     * Method makes new view and model connection
      * 1. gets points where was clicked
      * 2. gets type of ports (input, output), 2 selected points can not have same port
      * 3. gets id of port
@@ -635,14 +637,12 @@ public class Program {
                 conn = null;
                 dashboard.panel2.remove(labelConn);
             } else {
-                //actualizeBlocksForLevel();
-
                 Connection finalConn = conn;
                 labelConn.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseEntered(MouseEvent e) {
                         super.mouseEntered(e);
-                        Port outport = getLineAccordingToCoordinates(finalConn,e,1);
+                        Port outport = getLineAccordingToCoordinates(finalConn,1);
                         if ( outport != null ){
                             //labelConn.setToolTipText("Values: " + outport.getHashOfValue() + "\nLevel: " + outport.getBlock().getLevel());
                             labelConn.setToolTipText("Values: " + modelConn.getOutput().getHashOfValue() + "\nLevel: " +  modelConn.getOutput().getBlock().getLevel());
@@ -658,15 +658,12 @@ public class Program {
                             deleteConnectionSingleLineModel(modelConn);
                             // pozor na start a end
                             if ( modelConn.getOutput().getBlock().static_block ){
-
                                 modelConn.getOutput().getBlock().removeOutputPort(modelConn.getOutput());
                             }
                             if ( modelConn.getInput().getBlock().static_block ){
-                                //System.out.println("Deleting port: " + modelConn.getInput().getBlock() + " " + modelConn.getInput() + " " + modelConn.getInput().getBlock().getInputPorts());
                                 modelConn.getInput().getBlock().removeInputPort(modelConn.getInput());
                             }
                             newScheme.actualizeLevel();
-                            //actualizeBlocksForLevel();
                         } else {
                             // can we enter input data?
                             chosenConn = modelConn;
@@ -679,16 +676,24 @@ public class Program {
         }
         distroySelectedBlocks();
     }
+
+    /**
+     * Method decides if connection contains start block
+     * @param conn connection
+     * @return true or false
+     */
     public boolean isConnectedToStart(model.Connection conn){
         if ( conn.getOutput().getBlock().getName().equalsIgnoreCase("start") ){
             return true;
         }
         return false;
     }
-    public void newFrameInputData(){
-        //dashboard.inputFrameForm();
 
-    }
+    /**
+     * Method actualizes input values of block
+     * new values takes from output port of connected block
+     * @param block block containing new values
+     */
     public void executeConnectionToBlock(Block block){
         for ( model.Connection i : newScheme.getConnectionsOnModel() ){
             if ( i.getOutput().getBlock() == block ){
@@ -697,6 +702,10 @@ public class Program {
             }
         }
     }
+
+    /**
+     * Method actualizes levels to blocks
+     */
     public void actualizeBlocksForLevel(){
         blocksForLevel.clear();
         for ( Block i : newScheme.modelWorkingBlocks ){
@@ -710,9 +719,12 @@ public class Program {
                 blocksForLevel.get(i.getLevel()).add(i);
             }
         }
-
     }
 
+    /**
+     * Method called after clickong on solve
+     * counts all connections
+     */
     public void getResult()  {
         // vysledky budou v end blocku
         if ( ! newScheme.checkScheme()){
@@ -720,36 +732,19 @@ public class Program {
             JOptionPane.showMessageDialog(dashboard.frame1, "Scheme is uncomplete");
             return;
         }
-        //getInputToBlock();
-
-        //newFrameInputData();
         actualizeBlocksForLevel();
-
         // budeme pocitat po levlech
         int actLevel = 0;
         Map<Integer, List> blocksForLevelOld = new TreeMap<>(blocksForLevel);
 
         for ( Integer level : blocksForLevelOld.keySet() ){
             actualDebugLevel = level;
-
             // jdeme podle levlu
-            //List<Block> blocks = blocksForLevel.get(level);
             debugProgramStep();
-
-            /*javax.swing.Timer timer = new javax.swing.Timer(2000, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent evt) {
-
-                }
-            });
-            timer.setRepeats(false);
-            timer.start();*/
-
         }
         // uklidime
         actualDebugLevel = 1;
         distroyDebugSelectedBlocks();
-
     }
     public view.AbstractBlock getViewBlock(model.Block block){
         for( view.AbstractBlock vBlock : viewToModelBlocks.keySet() ){
@@ -769,12 +764,15 @@ public class Program {
         }
         selectedBlock.clear();
     }
+
+    /**
+     * Method distroys debug selected items
+     */
     public void distroyDebugSelectedBlocks(){
         for (view.AbstractBlock vblock : debugSelectedBlock){
             changeIconToNormal(vblock);
         }
         debugSelectedBlock.clear();
-        //dashboard.frame1.repaint();
     }
 
 
@@ -784,6 +782,12 @@ public class Program {
     public void changeIconToNormal( view.AbstractBlock vblock){
         vblock.labelBlock.setIcon( new ImageIcon(vblock.path));
     }
+
+    /**
+     * Method returns model block according to name
+     * @param name name of block
+     * @return model block
+     */
     public Block getBlockByName(String name){
         for ( model.Block bl : factoreBlocks){
             if ( bl.getName().equalsIgnoreCase(name) ){
@@ -792,55 +796,42 @@ public class Program {
         }
         return null;
     }
+
+    /**
+     * Method saves data on input, if data correct => shows yes icon, otherwise error icon
+     */
     public void sendData(){
         // sending data to model
         if(chosenConn == null){
             System.err.println("unchosen connection");
-
             return;
         }
-
-        //dashboard.lstate.setVisible(true);
         double val = 0;
         int i = 0;
         String valueStr ="";
-       // Port port =
-
         for ( String name : chosenConn.getOutput().getHashOfValue().keySet() ){
-            //System.out.println(name);
             // check if double
             valueStr = dashboard.textFieldValueGUI[i].getText().replaceAll(",","\\.");
             try{
                 val = Double.parseDouble(valueStr);
-                //System.out.println("pred: " + modelConn.getOutput().getHashOfValue());
-                //System.out.println("outport: "+chosenConn.getOutput());
-                //System.out.println("inport: "+chosenConn.getInput());
                 chosenConn.getOutput().getHashOfValue().put(name, val);
                 chosenConn.getInput().getHashOfValue().put(name, val);
-                //System.out.println(val);
-                //System.out.println("prepisuju: " + chosenConn.getOutput().getHashOfValue());
-                //dashboard.lstate.setText("saved");
                 dashboard.labelIconsGUI[i].setIcon(dashboard.iconYes);
-                //dashboard.labelIconsGUI[i].setOpaque(true);
-
-
                 dashboard.lstate.setForeground(new Color(000,200,81));
             } catch (NumberFormatException nfe){
                 dashboard.labelIconsGUI[i].setIcon(dashboard.iconNo);
                 System.err.println( valueStr + " is not a number");
                 JOptionPane.showMessageDialog(dashboard.frame1, "Value must be a number");
-                //dashboard.lstate.setText("error");
-                // to co tam bylo predtim
-                //dashboard.labelIconsGUI[i].setOpaque(true);
-
                 dashboard.textFieldValueGUI[i].setText(String.format("%.3f", (double) chosenConn.getOutput().getHashOfValue().get(name)));
-                //dashboard.lstate.setForeground(new Color(255,053,71));
-                //return;
             }
             i++;
         }
         dashboard.repaint();
     }
+
+    /**
+     * Method displays input form on left panel and fills data with actual data of chosen connection
+     */
     public void inputPanel() {
         int i = 0;
         boolean start = true; // pripojeno ke start bloku
@@ -855,8 +846,6 @@ public class Program {
             dashboard.textFieldNameGUI[j].setText("");
         }
         if ( ! isConnectedToStart(chosenConn) ){
-            // nejsme pripojeni ke start bloku, nemuzeme upravovat hodnoty
-            //i = 0;
             start = false;
             dashboard.bsavePorts.setEnabled(false);
         } else {
@@ -886,34 +875,21 @@ public class Program {
             i++;
         }
 
+        // not used values and names will ot be enable
         while ( i < 3){
             dashboard.textFieldValueGUI[i].setEnabled(false);
             dashboard.textFieldNameGUI[i].setEnabled(false);
             dashboard.labelNameGUI[i].setEnabled(false);
             dashboard.labelValueGUI[i].setEnabled(false);
 
-            /*if (start){
-                // pokud nejsme pripojeni ke start bloku, chceme videt aspon hodnoty vsech ostatnich portu po kliknuti na propoj
-                dashboard.textFieldValueGUI[i].setText("");
-                dashboard.textFieldNameGUI[i].setText("");
-            }*/
-
-            /*dashboard.textFieldValueGUI[i].setVisible(false);
-            dashboard.textFieldNameGUI[i].setVisible(false);
-            dashboard.labelValueGUI[i].setVisible(false);
-            dashboard.labelNameGUI[i].setVisible(false);*/
             i++;
         }
         for ( int j = 0; j < 3; j++ ){
-            //dashboard.labelIconsGUI[j].setOpaque(false);
+            // default icon - for keeping space next to input
             dashboard.labelIconsGUI[j].setIcon(dashboard.iconDef);
         }
 
-
-
         dashboard.panel4.setBounds(15, 410, 280, 145);
-
-
         dashboard.bsavePorts.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -921,11 +897,16 @@ public class Program {
             }
         });
     }
-    public AbstractBlock getViewBlockAccrodingToCoordinate(Integer x, Integer y){
+
+    /**
+     * Method returns view block according to coordinates (Loader needs)
+     * @param x coordinate x
+     * @param y coordinate y
+     * @return found abstract block
+     */
+    public AbstractBlock getViewBlockAccordingToCoordinate(Integer x, Integer y){
         for( AbstractBlock block : viewWorkingBlocks ){
-           // System.out.println("View " + viewWorkingBlocks);
             if ( block.getYBlock().equals( y) && block.getXBlock().equals(x )){
-                //System.out.println("found");
                 return block;
             }
         }
@@ -938,7 +919,10 @@ public class Program {
      */
     public static void main( String[] args ) throws IOException {
         Program program = new Program();
-        program.run();
-
+        try{
+            program.run();
+        } catch (Exception exp){
+            System.err.println(exp.getMessage());
+        }
     }
 }
