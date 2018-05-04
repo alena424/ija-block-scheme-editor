@@ -41,6 +41,7 @@ public class DashBoard extends JPanel {
     public JButton bcount = new JButton();
     public JButton bload = new JButton();
     public JButton bsave = new JButton();
+    public JButton bnew = new JButton();
     public JButton bdebug = new JButton();
     JLabel lend = new JLabel();
     JLabel lstart = new JLabel();
@@ -184,7 +185,7 @@ public class DashBoard extends JPanel {
         lchoose.setForeground(new Color(247, 247, 247));
         lchoose.setFont(lchoose.getFont().deriveFont(lchoose.getFont().getSize() + 3f));
         panel1.add(lchoose);
-        lchoose.setBounds(35, 155, 115, 30);
+        lchoose.setBounds(35, 155, 240, 30);
 
         //---- bcount ----
         bcount.setText("SOLVE");
@@ -194,10 +195,17 @@ public class DashBoard extends JPanel {
         panel1.add(bcount);
         bcount.setBounds(25, 575, 230, 60);
 
+        //---- bnew ----
+        bnew.setText("NEW");
+        bnew.setBackground(new Color(61, 204, 199));
+        //bnew.setFont(bnew.getFont().deriveFont(bnew.getFont().getSize() + 1f));
+        panel1.add(bnew);
+        bnew.setBounds(15, 90, 63, 40);
+
         //---- bload ----
         bload.setText("OPEN");
         bload.setBackground(new Color(61, 204, 199));
-        bload.setFont(bload.getFont().deriveFont(bload.getFont().getSize() + 3f));
+        bload.setFont(bload.getFont().deriveFont(bload.getFont().getSize() - 1f));
         bload.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -205,22 +213,24 @@ public class DashBoard extends JPanel {
             }
         });
         panel1.add(bload);
-        bload.setBounds(15, 90, 80, 40);
+        bload.setBounds(82, 90, 63, 40);
 
         //---- bsave ----
         bsave.setText("SAVE");
         bsave.setBackground(new Color(61, 204, 199));
-        bsave.setFont(bsave.getFont().deriveFont(bsave.getFont().getSize() + 3f));
+        bsave.setFont(bsave.getFont().deriveFont(bsave.getFont().getSize() - 1f));
         panel1.add(bsave);
-        bsave.setBounds(105, 90, 80, 40);
+        bsave.setBounds(149, 90, 63, 40);
 
 
         //---- bdebug ----
         bdebug.setText("DEBUG");
         bdebug.setBackground(new Color(61, 204, 199));
-        bdebug.setFont(bdebug.getFont().deriveFont(bdebug.getFont().getSize() + 1f));
+        bdebug.setFont(bdebug.getFont().deriveFont(bdebug.getFont().getSize() - 4f));
         panel1.add(bdebug);
-        bdebug.setBounds(195, 90, 80, 40);
+        bdebug.setBounds(216, 90, 63, 40);
+
+
 
         //---- lhelp ----
         lhelp.setText("HELP");
@@ -237,7 +247,7 @@ public class DashBoard extends JPanel {
         ldown.setOpaque(true);
         ldown.setBackground(new Color(51, 51, 51));
         panel1.add(ldown);
-        ldown.setBounds(0, 650, 1000, 20);
+        ldown.setBounds(0, 650, 1000, 25);
 
         //---- lup ----
         lup.setOpaque(true);

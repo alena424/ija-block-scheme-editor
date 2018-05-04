@@ -41,8 +41,8 @@ public class Connection  {
         this.blockTo = B;
         centerLabelToolTip = label;
 
-        centerLabelToolTip.setBackground(Color.BLUE);
-        centerLabelToolTip.setOpaque(true);
+        //centerLabelToolTip.setBackground(Color.BLUE);
+        //centerLabelToolTip.setOpaque(true);
         //centerLabelToolTip.
         //centerLabelToolTip.setPreferredSize(new Dimension(20,20));
 
