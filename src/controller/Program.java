@@ -197,6 +197,12 @@ public class Program {
                 debugProgramStep();
             }
         });
+        dashboard.bnew.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clearCanvas();
+            }
+        });
         dashboard.lhelp.addActionListener(new Help(this));
 
         for (JLabel lab: panelBlocks
@@ -251,15 +257,14 @@ public class Program {
                 }
                 executeConnectionToBlock(actBlock);
 
-                //inputPanel();
-                //viewBlock.labelBlock.setIcon(viewBlock.getIconImg());
-                //dashboard.panel2.repaint();
             }
 
         }
 
         if ( end == 1){
             actualDebugLevel = 0;
+            JOptionPane.showMessageDialog(dashboard.frame1,"Debug has finished");
+            distroyDebugSelectedBlocks();
         } else {
             actualDebugLevel++;
         }
