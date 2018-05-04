@@ -10,45 +10,31 @@
 
 package view;
 
-import model.Port;
 import net.miginfocom.swing.MigLayout;
-
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class DashBoard extends JPanel {
     public JFrame frame1 = new JFrame("Block editor");
     public JPanel panel1 = new JPanel();
     public JPanel panel2 ;
-
     JPanel panel3 = new JPanel();
     public JPanel panel4 = new JPanel();
-
     public JButton lhelp = new JButton();
     JLabel lwelcome = new JLabel();
-    JLabel laddion = new JLabel();
-    JLabel linvert = new JLabel();
-    JLabel lmulti = new JLabel();
-    JLabel ldivision = new JLabel();
-    JLabel lrand = new JLabel();
     JLabel lchoose = new JLabel();
     public JButton bcount = new JButton();
     public JButton bload = new JButton();
     public JButton bsave = new JButton();
     public JButton bnew = new JButton();
     public JButton bdebug = new JButton();
-    JLabel lend = new JLabel();
-    JLabel lstart = new JLabel();
     JLabel ldown = new JLabel();
     JLabel lup = new JLabel();
     JLabel lleftpan = new JLabel();
-    JLabel lback = new JLabel();
     public ImageIcon iconNo = new ImageIcon("img/if_close_13493.png");
     public ImageIcon iconYes = new ImageIcon("img/if_check_13491.png");
     public ImageIcon iconDef = new ImageIcon("img/default_check.png");
@@ -59,19 +45,6 @@ public class DashBoard extends JPanel {
     public JLabel[] labelNameGUI = new JLabel[3];
     public JLabel[] labelValueGUI = new JLabel[3];
     public JLabel[] labelIconsGUI = new JLabel[3];
-
-    JLabel lname = new JLabel();
-    public JTextField tname = new JTextField();
-    JLabel lval = new JLabel();
-    public JTextField tval = new JTextField();
-    JLabel label3 = new JLabel();
-    public JTextField textField2 = new JTextField();
-    JLabel label6 = new JLabel();
-    public JTextField textField5 = new JTextField();
-    JLabel label4 = new JLabel();
-    public JTextField textField3 = new JTextField();
-    JLabel label7 = new JLabel();
-    public JTextField textField6 = new JTextField();
     public JButton bsavePorts = new JButton();
     public JLabel lstate = new JLabel();
 
@@ -80,7 +53,7 @@ public class DashBoard extends JPanel {
     //all connections
     List <Connection> connectionsOnDashboard = new ArrayList<>();
     /**
-     * Method displays a dashboard, needs to know which blocks should be displayed
+     * Method displays a dashboard
      */
     public DashBoard(){
        // Container frame1ContentPane = frame1.getContentPane();
@@ -103,7 +76,6 @@ public class DashBoard extends JPanel {
                 }
             }
         };
-        //inputPanel();
         panel4.setBackground(new Color(94, 94, 94));
         panel4.setLayout(new MigLayout(
                 "fill,hidemode 3",
@@ -135,38 +107,27 @@ public class DashBoard extends JPanel {
             labelIconsGUI[i] = new JLabel();
 
             labelNameGUI[i].setText("Name:");
-           // panel4.add(labelNameGUI[i], "cell " + row + " " + col + " 2 1");
             panel4.add(labelNameGUI[i], "cell " + row + " " + col );
             panel4.add(textFieldNameGUI[i], "cell 1 " + i + " 2 1");
-
             labelValueGUI[i].setText("Value:");
             panel4.add(labelValueGUI[i], "cell 3 " + i + " 2 1");
             panel4.add(textFieldValueGUI[i], "cell 5 " + i + " 4 1");
-
-            //label5.setDisabledIcon(new ImageIcon("D:\\Dokumenty_D\\FIT_VUT\\2017-2018\\letni_semestr\\IJA\\projekt\\img\\if_close_13493.png"));
-            //label5.setOpaque(true);
-            //label5.setEnabled(false);
             labelIconsGUI[i].setBackground(new Color(94, 94, 94));
-            //labelIconsGUI[i].setEnabled(false);
             panel4.add(labelIconsGUI[i], "cell 9 " + i);
-
             col += 1;
-
         }
         //---- bsavePorts ----
         bsavePorts.setText("OK");
         bsavePorts.setBackground(new Color(243, 211, 189));
-
         panel4.add(bsavePorts, "cell 0 3 2 1");
-
         lstate.setText("");
         panel4.add(lstate, "cell 6 3 4 1");
-
         panel1.add(panel3);
 
         panel2.setOpaque(true);
         panel2.setBackground(new Color(238, 238, 238));
         panel2.setLayout(null);
+
         panel1.add(panel2);
         panel2.setBounds(295, 25, 705, 625);
 
@@ -198,14 +159,13 @@ public class DashBoard extends JPanel {
         //---- bnew ----
         bnew.setText("NEW");
         bnew.setBackground(new Color(61, 204, 199));
-        //bnew.setFont(bnew.getFont().deriveFont(bnew.getFont().getSize() + 1f));
         panel1.add(bnew);
         bnew.setBounds(15, 90, 63, 40);
+        bnew.setMargin(new Insets(0,0,0,0));
 
         //---- bload ----
         bload.setText("OPEN");
         bload.setBackground(new Color(61, 204, 199));
-        bload.setFont(bload.getFont().deriveFont(bload.getFont().getSize() - 1f));
         bload.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -214,23 +174,22 @@ public class DashBoard extends JPanel {
         });
         panel1.add(bload);
         bload.setBounds(82, 90, 63, 40);
+        bload.setMargin(new Insets(0,0,0,0));
 
         //---- bsave ----
         bsave.setText("SAVE");
         bsave.setBackground(new Color(61, 204, 199));
-        bsave.setFont(bsave.getFont().deriveFont(bsave.getFont().getSize() - 1f));
+        //bsave.setFont(bsave.getFont().deriveFont(bsave.getFont().getSize() - 1f));
         panel1.add(bsave);
         bsave.setBounds(149, 90, 63, 40);
-
+        bsave.setMargin(new Insets(0,0,0,0));
 
         //---- bdebug ----
         bdebug.setText("DEBUG");
         bdebug.setBackground(new Color(61, 204, 199));
-        bdebug.setFont(bdebug.getFont().deriveFont(bdebug.getFont().getSize() - 4f));
         panel1.add(bdebug);
         bdebug.setBounds(216, 90, 63, 40);
-
-
+        bdebug.setMargin(new Insets(0,0,0,0));
 
         //---- lhelp ----
         lhelp.setText("HELP");
@@ -256,6 +215,11 @@ public class DashBoard extends JPanel {
         lup.setBounds(0, 0, 1000, 25);
 
     }
+
+    /**
+     * Method generates blocks on left panel, where we choose blocks
+     * @param factoreblock list of block to display
+     */
     public void getBlocksOnLeft(List<model.Block> factoreblock){
         // default height and width of block
         Integer width = 65;
@@ -272,15 +236,13 @@ public class DashBoard extends JPanel {
                 Y += 85;
                 X = 30;
             }
-            //JLabel label = new JLabel();
+            // adding label do panel1
             labelblock.add( new JLabel() );
-            //System.out.println(block.getName());
-
             labelblock.get(counter).setIcon(block.getIcon());
             labelblock.get(counter).setText( block.getName());
             panel1.add(labelblock.get(counter));
-
             Integer finalI = counter;
+            // set tool tip to block
             labelblock.get(counter).addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
@@ -289,17 +251,14 @@ public class DashBoard extends JPanel {
             });
 
             if ( block.static_block){
-                //labelblock.get(counter).setBounds(block.static_x, block.static_y, width, height);
+                // for start and end dfferent behavior
             } else{
+                // setbounds according to number of block
                 labelblock.get(counter).setBounds(X, Y, width, height);
-
                 X += 85;
                 i++;
-
             }
             counter++;
-
-
         }
 
         //---- lleftpan ----
@@ -308,7 +267,6 @@ public class DashBoard extends JPanel {
         lleftpan.setBackground(new Color(94, 94, 94));
         panel1.add(lleftpan);
         lleftpan.setBounds(0, 0, 295, 670);
-
     }
     /**
      * Method actualizes all connection
@@ -329,21 +287,18 @@ public class DashBoard extends JPanel {
         return connectionsOnDashboard;
     }
 
+    /**
+     * Method adds conn to connectionOnDashboard
+     * @param conn new conection
+     */
     public void addConnectionsOnDashboard(Connection conn) {
         this.connectionsOnDashboard.add(conn);
         panel2.repaint();
     }
-    public void removeConnectionOnDashboard(Connection conn){
-        Integer index = this.connectionsOnDashboard.indexOf(conn);
-        if ( index == -1 ){
-            // unexisting connection
-            System.err.println("You want to delete unexisting connection");
-        } else {
-            connectionsOnDashboard.remove(conn);
-            System.out.println("Connection was deleted\n");
-        }
-    }
 
+    /**
+     * Methos sets visible main panel
+     */
     public void setVisible() {
 
         Container frame1ContentPane = frame1.getContentPane();
@@ -363,11 +318,9 @@ public class DashBoard extends JPanel {
         preferredSize.height += insets.bottom;
         frame1ContentPane.setMinimumSize(preferredSize);
         frame1ContentPane.setPreferredSize(preferredSize);
-
         frame1.pack();
         frame1.setLocationRelativeTo(frame1.getOwner());
         frame1.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame1.setVisible(true);
     }
-
 }

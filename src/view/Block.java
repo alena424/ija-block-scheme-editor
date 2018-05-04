@@ -23,7 +23,8 @@ public class Block extends AbstractBlock {
     @Override
     public void mousePressed(MouseEvent event) {
         System.out.println("Pressed");
-        x = event.getX();
-        y = event.getY();
+        //x = event.getX();
+        //y = event.getY();
+        clickPosition.setLocation(event.getX(), event.getY());
     }
 }

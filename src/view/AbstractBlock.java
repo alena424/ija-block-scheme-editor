@@ -36,6 +36,7 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
         public JLabel labelBlock;
         protected Integer NPortIn;
         protected Integer NPortOut;
+        public Point clickPosition ;
 
         // input ports of block identified by id, id starts from 1
         public HashMap <Integer,Point> inputPortPointsHash = new HashMap<Integer, Point>();
@@ -60,6 +61,7 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
             this.labelBlock = label;
             this.labelBlock.addMouseListener(this);
             this.labelBlock.addMouseMotionListener((MouseMotionListener) this);
+            clickPosition = new Point(0,0);
      }
 
     public boolean isStatic_object() {
