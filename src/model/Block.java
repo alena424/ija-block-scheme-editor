@@ -32,8 +32,6 @@ public abstract class Block {
     public String icon = "img/default.png";
     public String selectedIcon = "img/default.png";
 
-   // protected Scheme scheme;
-
     public Block (HashMap<Integer,Port> inputPortsPorts, HashMap<Integer,Port> outputPortsPorts) {
         inputPorts = new HashMap<Integer, Port>(inputPortsPorts);
         outputPorts = new HashMap<Integer, Port>(outputPortsPorts);
@@ -153,7 +151,6 @@ public abstract class Block {
         return false;
     }
     public void removeInputPort(Port port){
-        //System.out.println(port.getId());
         inputPorts.remove(port.getId());
     }
     public void removeOutputPort(Port port){
@@ -176,9 +173,6 @@ public abstract class Block {
     public Port getOutputPortById( Integer order ) {
         return this.outputPorts.get( order );
     }
-
-
-
     public void execute() {
     }
 
