@@ -253,7 +253,7 @@ public class Program {
 
     /**
      * Method deletes a view block with all connections connected to block
-     * @param block
+     * @param block block to be deleted
      */
     protected void deleteViewBlock(view.AbstractBlock block){
         //System.out.println("deleting label view");
@@ -272,7 +272,7 @@ public class Program {
     /**
      * Method finds all connections belonging to block and deletes them
      * @param block block that will be deleted
-     * @return
+     * @return true/false
      */
     public boolean deleteConnectionModel(AbstractBlock block){
         Block blockToDelete = viewToModelBlocks.get(block);
@@ -346,7 +346,7 @@ public class Program {
 
     /**
      * Method deletes all connections relative to block
-     * @param block
+     * @param block block to be deleted
      */
     protected void deleteConnection(view.AbstractBlock block){
 
@@ -391,6 +391,7 @@ public class Program {
     /**
      * Function generates block
      * @param block block we get information from, when we are creating view and model block
+     * @return new view block
      */
     public view.AbstractBlock generateBlock(Block block){
         // new label for new block
@@ -798,7 +799,7 @@ public class Program {
     }
 
     /**
-     * Method saves data on input, if data correct => shows yes icon, otherwise error icon
+     * Method saves data on input, if data correct than it shows yes icon, otherwise error icon
      */
     public void sendData(){
         // sending data to model
@@ -922,8 +923,8 @@ public class Program {
     }
     /**
      * Main runs program
-     * @param args
-     * @throws IOException
+     * @param args arguments
+     * @throws IOException exceptions
      */
     public static void main( String[] args ) throws IOException {
         Program program = new Program();
