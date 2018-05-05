@@ -1,13 +1,15 @@
+===================
 IJA - projekt 2018
 Blokový editor
 ===================
 
 -----------------------------
 Autoři:
+
 Alena Tesařová (xtesar36)
 Jan Šorm (xsormj00)
 
------------------------------
+------------------------------
 
 
 -----------------------
@@ -16,7 +18,7 @@ Popis blokového editoru
 Blokový editor umí vytvářet, ukládat a načítat bloková schémata, kde každé schéma je složeno z bloků a propojů mezi nimi.
 Každý blok má definované vstupní a výstupní porty. S každým portem je spojen typ, který je reprezentován množinou dat v podobě dvojic název=>hodnota (hodnota je vždy typu double).
 Bloky je možné spojit pouze mezi výstupním a vstupním blokem. Každý blok obsahuje výpočet, který transformuje hodnoty ze vstupních portů na hodnoty výstupních portů. Je kontrolována komatibilita vstupního a výstupního propoje (musí být stejného typu). 
-Výpočet je možné provést pouze tehdy, kdy jsou když jsou všechny bloky propojené. Nejsou možné cykly ve schématu.
+Výpočet je možné provést pouze tehdy, když jsou všechny bloky propojené. Nejsou možné cykly ve schématu.
 
 ----------
 Typy portů
@@ -48,7 +50,7 @@ Výpočty - vzorce
 --------
 Ovládání
 --------
-Generování bloků:	kliknout levým tlačítkem myši na blok
+Generování bloků:	kliknout levým tlačítkem myši na blok v levém panelu
 Mazání bloků:		kliknout pravým tlačítkem myši na blok
 Spojení bloků:		kliknout na port (zvýrazní se blok) a pak kliknout na druhý port, který chcete spojit
 Zadávání hodnot: 	kliknutím pravým tlačítkem myši na spojení bloků, na levé straně se zobrazí tabulka na zadání hodnot, pro uložení hodnot, zmáčkněte tlačítko OK
@@ -57,10 +59,10 @@ Nové schéma:		tlačítko NEW
 Načíst schéma:		tlačítko OPEN
 Uložit schéma:		tlačítko SAVE
 Debbuging:			tlačíko DEBUG provede vždy jeden krok výpočtu
-Zobrazení nápovědy:	tlačítko HELP
+Zobrazení nápovědy:	tlačítko HELP zobrazí nápovědu
 
 
-Poznámka: první bloky musí být spojené se START blokem a poslední bloky výpočtu musí být spojeny s END blokem, jinak schéma nepůjde vypočítat
+Poznámka: první bloky musí být spojené se START blokem a poslední bloky výpočtu musí být spojeny s END blokem, jinak schéma nepůjde sestavit
 
 -------
 Licence
