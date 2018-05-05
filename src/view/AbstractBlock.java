@@ -2,7 +2,7 @@
  * @file  AbstractBlock.java
  * @brief Abstract class for  block
  *
- * File containing all functions to operate with a block
+ * File containing all functions to operate with a view block
  *
  * @author Alena Tesarova (xtesar36)
  * @author Jan Sorm (xsormj00)

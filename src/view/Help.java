@@ -1,3 +1,13 @@
+/*
+ * @file  Help.java
+ * @brief Class for Help
+ *
+ * File containing help.
+ *
+ * @author Alena Tesarova (xtesar36)
+ * @author Jan Sorm (xsormj00)
+ */
+
 package view;
 
 import controller.Program;

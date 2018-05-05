@@ -2,7 +2,7 @@
  * @file  Scheme.java
  * @brief Class for scheme
  *
- * File containing specific functions for scheme.
+ * File containing specific functions for scheme. Main class to work with model.
  *
  * @author Alena Tesarova (xtesar36)
  * @author Jan Sorm (xsormj00)

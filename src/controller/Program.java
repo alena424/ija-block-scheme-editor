@@ -1,3 +1,12 @@
+/*
+ * @file  Program.java
+ * @brief Main Class for controlling all
+ *
+ * File containing specific functions to control view and model
+ *
+ * @author Alena Tesarova (xtesar36)
+ * @author Jan Sorm (xsormj00)
+ */
 package controller;
 
 import model.Block;

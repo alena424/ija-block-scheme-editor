@@ -1,3 +1,12 @@
+/*
+ * @file  EndBlock.java
+ * @brief Class for end block
+ *
+ * File containing specific functions end block
+ *
+ * @author Alena Tesarova (xtesar36)
+ * @author Jan Sorm (xsormj00)
+ */
 package model;
 
 

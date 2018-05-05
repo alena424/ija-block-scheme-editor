@@ -1,3 +1,10 @@
+/*
+ * @file  StartBlock.java
+ * @brief Class for start block
+ *
+ * @author Alena Tesarova (xtesar36)
+ * @author Jan Sorm (xsormj00)
+ */
 package model;
 
 import java.util.HashMap;

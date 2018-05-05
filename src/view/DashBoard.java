@@ -2,7 +2,7 @@
  * @file  DashBoard.java
  * @brief Class for DashBoard
  *
- * File containing specific functions for dashboard.
+ * File containing specific functions for dashboard. Main class to work with view.
  *
  * @author Alena Tesarova (xtesar36)
  * @author Jan Sorm (xsormj00)

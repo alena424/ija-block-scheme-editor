@@ -2,7 +2,7 @@
  * @file  Connection.java
  * @brief Class for view of connection
  *
- * File containing specific functions for view of connection.
+ * File containing specific functions for view of view connection.
  *
  * @author Alena Tesarova (xtesar36)
  * @author Jan Sorm (xsormj00)
@@ -35,6 +35,7 @@ public class Connection  {
      * Make connection of 2 blocks
      * @param A starting block from
      * @param B end block to
+     * @param label block's label
      */
     public Connection(AbstractBlock A, AbstractBlock B, JLabel label){
         this.blockFrom = A;

@@ -1,3 +1,12 @@
+/*
+ * @file  FactoryBlock.java
+ * @brief Class for making new objects
+ *
+ * File containing specific function to create instances of block
+ *
+ * @author Alena Tesarova (xtesar36)
+ * @author Jan Sorm (xsormj00)
+ */
 package model;
 
 import java.util.HashMap;
