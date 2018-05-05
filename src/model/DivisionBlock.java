@@ -17,13 +17,17 @@ public class DivisionBlock extends Block {
 
     public DivisionBlock(HashMap<Integer, Port> inputPortsPorts, HashMap<Integer, Port> outputPortsPorts) {
         super(inputPortsPorts,outputPortsPorts);
-        /*super( scheme, level )*/;
-        icon = "img/division.png";
-        selectedIcon = "img/selected/division.png";
+        icon = "lib/img/division.png";
+        selectedIcon = "lib/img/selected/division.png";
         name = "Division";
         countInput = 2;
         countOutput = 1;
     }
+
+    /**
+     * Division block:
+     * numbers from second port are divided by number from first port
+     */
     public void execute() {
 
         // vezmeme hodnoty z input z portu 1 a vydelime touto hodnotou hodnoty v portu2
@@ -31,8 +35,6 @@ public class DivisionBlock extends Block {
 
         if ( divider == 0 ){
             throw new ArithmeticException("Dividing by zero is not allowed");
-            //System.err.println("Can not devide by zero");
-            //return;
         }
         Double val1 = inputPorts.get(2).getHashOfValue().get("Name2");
         Double val2 = inputPorts.get(2).getHashOfValue().get("Name3");

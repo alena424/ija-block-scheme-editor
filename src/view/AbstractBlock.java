@@ -36,7 +36,7 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
         public JLabel labelBlock;
         protected Integer NPortIn;
         protected Integer NPortOut;
-        public Point clickPosition ;
+        public Point clickPosition ; // needs to know when we drag a block where was clicked
 
         // input ports of block identified by id, id starts from 1
         public HashMap <Integer,Point> inputPortPointsHash = new HashMap<Integer, Point>();
@@ -61,7 +61,7 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
             this.labelBlock = label;
             this.labelBlock.addMouseListener(this);
             this.labelBlock.addMouseMotionListener((MouseMotionListener) this);
-            clickPosition = new Point(0,0);
+            clickPosition = new Point(0,0); // nowhere was clicked for this moment
      }
 
     public boolean isStatic_object() {
@@ -82,7 +82,6 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
      */
     public void setNPortIn(int NPortX) {
         this.NPortIn = NPortX;
-        //System.out.println("It has " + NPortX + "input ports\n");
         updateInputPort();
     }
 
@@ -90,7 +89,6 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
      * Method updates input ports according to position of block
      */
     public void updateInputPort(){
-        //System.out.println("Updation input ports...\n");
         Double divX = ((double)width)/(NPortIn+1);
 
         if ( inputPortPointsHash.isEmpty() ){
@@ -102,7 +100,6 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
                 inputPortPointsHash.put(i,bod);
             }
         } else{
-           // System.out.println("List is not empty");
             for ( int i = 1; i <= NPortIn; i++ ) {
 
                 // index from 1
@@ -110,8 +107,6 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
                 bod.y = y;
                 bod.x = (int) (x + i*divX);
                 inputPortPointsHash.get(i).setLocation( bod);
-                //System.out.println("Actualizing to:");
-                //System.out.println(bod);
             }
         }
     }
@@ -119,7 +114,6 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
      * Method updates output ports according to position of block
      */
     public void updateOutputPort(){
-        //System.out.println("Updation output ports...\n");
         Double div = ((double)width)/(NPortOut+1);
         // adding new port
         if ( outputPortPointsHash.isEmpty() ){
@@ -208,6 +202,13 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
          }
          return idPort;
     }
+
+    /**
+     * Method returns distance between two points (pythagoras)
+     * @param A point A
+     * @param B point B
+     * @return distance in double
+     */
     private double lengthPath(Point A, Point B){
          return sqrt( pow(A.x - B.x, 2) + pow(A.y - B.y, 2) );
     }
@@ -241,8 +242,6 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
 
     public void setX(Integer x) {
         this.x = x;
-        // musime zmenit i souradnice portu
-
     }
 
     public void setY(Integer y) {
@@ -314,5 +313,4 @@ public class AbstractBlock implements MouseListener, MouseMotionListener{
     public void mouseMoved(MouseEvent e) {
 
     }
-
 }

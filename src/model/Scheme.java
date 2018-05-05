@@ -15,47 +15,27 @@ import java.util.*;
 import java.util.List;
 
 public class Scheme {
-    private Integer id;
+    private Integer id; // id of scheme
     private HashMap<Integer,Block> allBlocks = new HashMap<Integer, Block>(); // hash
     public List<model.Block> modelWorkingBlocks; // array
-    private Integer maxId = 0;
     private boolean cycle = false;
     private boolean levelFault = false;
     protected FactoryBlock blockFactory = new FactoryBlock();
-    //protected AbstractBlock[] factoreBlock;
     List<Block> factoreBlock = new ArrayList<Block>();
     // generated block to work with
     List<Connection> connectionsOnModel = new ArrayList<>();
-    public Block startblock;
-    public Block endblock;
+    public Block startblock; // start block is good to know
 
     public Scheme( Integer id ) {
         modelWorkingBlocks = new ArrayList<>();
         this.id = id;
     }
 
-    public Integer getMaxId() {
-        return this.maxId;
-    }
-
-    public boolean isCycle() {
-        return this.cycle;
-    }
-
-    public boolean isLevelFault() {
-        return this.levelFault;
-    }
-
-   /* public void addBlock( Block newBlock ) {
-        this.allBlocks.put( maxId, newBlock );
-        this.maxId++;
-    }*/
-
     /**
      * Class for creating objects
      * @param name identification of the block (p.e. Addition, Invert)
-     * @param inputP
-     * @param outputP
+     * @param inputP input port
+     * @param outputP output port
      *
      */
     public void factorBlock(String name, HashMap<Integer, Port> inputP, HashMap<Integer, Port> outputP){
@@ -86,8 +66,6 @@ public class Scheme {
      */
     public boolean checkPortsToBeConnected(Port port1, Port port2){
         // 1. same type
-        //System.out.println(port1.getName());
-        //System.out.println(port2.getName());
         if ( ! port1.getName().equals(port2.getName())){
             System.err.println("Ports must be same type otherwise can not be connected\n");
             return false;
@@ -102,7 +80,6 @@ public class Scheme {
             return false;
         }
         return true;
-
     }
 
 
@@ -126,19 +103,17 @@ public class Scheme {
         return this.allBlocks;
     }
 
-    public boolean isReadyForExecute() {
-        for ( Block block : this.allBlocks.values() ) {
-            if ( block.getLevel() != 0 && block.isFreeInput() ) {
-                return false;
-            }
-        }
-        return true;
-    }
-
+    /**
+     * Method make new model connection
+     * @param blockFrom block that was clicked first
+     * @param blockTo block that was clicked second
+     * @param idFromPort id of port from (belongs to blockfrom)
+     * @param idToPort id of port to  (belongs to blockfrom)
+     * @param typePortFrom input - 1, output - 2 (belong toblock from)
+     * @return model connection or null
+     */
     public model.Connection makeNewConnectionModel(Block blockFrom, Block blockTo, Integer idFromPort, Integer idToPort, Integer typePortFrom){
         // connecting start block with end block
-        //System.out.println("new con block from: "+ blockFrom);
-        //System.out.println("new con block to: "+ blockTo);
         Port startPort = null;
         Port endPort = null;
         if( blockFrom.static_block && blockTo.static_block ){
@@ -159,9 +134,7 @@ public class Scheme {
                 startPort.setOwnerBlock(blockFrom);
                 startPort.setId(idFromPort);
 
-                //System.out.println("Creating from port of id" + idFromPort);
                 if ( blockFrom.addoutputPort(idFromPort,startPort) == false){
-                    //System.out.println("End");
                     // id of port is used
                     return null;
                 }
@@ -173,10 +146,8 @@ public class Scheme {
                 startPort.setOwnerBlock(blockTo);
                 startPort.setId(idToPort);
 
-                //System.out.println("Creating to port of id " + idToPort);
                 if ( blockTo.addoutputPort(idToPort,startPort  ) == false ){
                     // id of port is used
-                    //System.out.println("End");
                     return null;
                 }
             }
@@ -188,7 +159,6 @@ public class Scheme {
                 endPort.setOwnerBlock(blockTo);
                 endPort.setId(idFromPort);
 
-                //System.out.println("Creating from port of id" + idFromPort);
                 if ( blockFrom.addinputPort(idFromPort,endPort) == false){
                     // id of port is used
                     return null;
@@ -201,7 +171,6 @@ public class Scheme {
                 endPort.setOwnerBlock(blockFrom);
                 endPort.setId(idToPort);
 
-                //System.out.println("Creating to port of id " + idToPort);
                 if ( blockTo.addinputPort(idToPort,endPort) == false){
                     // id of port is used
                     return null;
@@ -212,7 +181,6 @@ public class Scheme {
         model.Connection connModel;
         if ( typePortFrom == 1 ){
             // input port from
-            //System.out.println("id of to port " + idToPort);
             if( checkPortsToBeConnected(blockFrom.getInputPortById(idFromPort), blockTo.getOutputPortById(idToPort)) ){
                 connModel = new model.Connection(blockFrom.getInputPortById(idFromPort),
                         blockTo.getOutputPortById(idToPort));
@@ -276,6 +244,11 @@ public class Scheme {
         return connectionsOnModel.remove(conn);
     }
 
+    /**
+     * Method finds max level of blocks that are input blocks for block in arguments
+     * @param block trying to find max level of this block
+     * @return max level
+     */
     public Integer getMaxLevelOfOutputPort(Block block){
         Integer maxLevel = 0;
         // projdeme vsechny spojeni, kde je tento block jako input block
@@ -283,9 +256,7 @@ public class Scheme {
 
             if ( i.getInput().getBlock() == block ){
                 // block je jako input block
-                //System.out.println("Block: "+ block);
                 Block connectedBlock = i.getOutput().getBlock();
-                //System.out.println("Connected block: "+ connectedBlock);
                 if ( connectedBlock.getLevel() > maxLevel ){
                     maxLevel = connectedBlock.getLevel();
                 }
@@ -293,6 +264,10 @@ public class Scheme {
         }
         return maxLevel;
     }
+
+    /**
+     * Method goes throw all blocks and actualizes all levels
+     */
     public void actualizeLevel(){
         for ( Block i : modelWorkingBlocks ){
             i.setLevel(getMaxLevelOfOutputPort(i) + 1);
@@ -301,6 +276,11 @@ public class Scheme {
             i.setLevel(getMaxLevelOfOutputPort(i) + 1);
         }
     }
+
+    /**
+     * Method detects cycle in scheme
+     * @return true - correct, false - cycle detected
+     */
     public boolean detectCycle(){
         // cyklus detekujeme v pripade, ze se vracime bloku, ktery je spojen s podezrelym blokem
         for ( Block actBlock : modelWorkingBlocks ){
@@ -316,7 +296,6 @@ public class Scheme {
             Integer depth = 0;
             while (! stack.isEmpty() && depth < 10){
                 Block block = stack.pop();
-                System.out.println(block);
                 if ( actBlock == block ){
                     System.err.println("Cycle detected");
                     return true;
@@ -334,20 +313,20 @@ public class Scheme {
         return false;
     }
 
+    /**
+     * Method checks that all input and output ports of all blocks are not free
+     * @return true - OK, false - scheme is uncomplete
+     */
     public boolean checkScheme(){
         // zkontrolujeme, jestli vsechny vstupy maji vystupy a obracene
         for ( Block i : modelWorkingBlocks ){
             if ( i.isFreeInput() ){
-                //System.out.println("IN" + i);
                 return false;
             }
             if ( i.isFreeOutput() ){
-                //System.out.println("OUT" + i);
                 return false;
             }
         }
         return true;
     }
-
-
 }

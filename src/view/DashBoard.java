@@ -35,9 +35,9 @@ public class DashBoard extends JPanel {
     JLabel ldown = new JLabel();
     JLabel lup = new JLabel();
     JLabel lleftpan = new JLabel();
-    public ImageIcon iconNo = new ImageIcon("img/if_close_13493.png");
-    public ImageIcon iconYes = new ImageIcon("img/if_check_13491.png");
-    public ImageIcon iconDef = new ImageIcon("img/default_check.png");
+    public ImageIcon iconNo = new ImageIcon("lib/img/if_close_13493.png");
+    public ImageIcon iconYes = new ImageIcon("lib/img/if_check_13491.png");
+    public ImageIcon iconDef = new ImageIcon("lib/img/default_check.png");
 
     // INPUT FORM - MIG LAYOUT
     public JTextField[] textFieldNameGUI = new JTextField[3];

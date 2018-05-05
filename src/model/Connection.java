@@ -11,18 +11,14 @@
 package model;
 
 public class Connection {
-
+    // connection needs to know inut and output port
     private Port input;
     private Port output;
-
     public Connection( Port input, Port output ) {
         this.input = input;
         this.output = output;
         input.setConnection( this );
         output.setConnection( this );
-        //System.out.println("New connection was created: ");
-        //System.out.println(input.getName());
-        //System.out.println(output.getName());
     }
 
     public Port getInput() {
@@ -33,6 +29,9 @@ public class Connection {
         return this.output;
     }
 
+    /**
+     * Method unsets connection to port
+     */
     public void deleteConnection() {
         this.input.unsetConnection();
         this.output.unsetConnection();

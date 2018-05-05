@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class shows help
+ */
 public class Help implements ActionListener {
     Program program;
     public Help(Program program){

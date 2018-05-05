@@ -41,17 +41,19 @@ public class Connection  {
         this.blockTo = B;
         centerLabelToolTip = label;
 
-        //centerLabelToolTip.setBackground(Color.BLUE);
-        //centerLabelToolTip.setOpaque(true);
-        //centerLabelToolTip.
-        //centerLabelToolTip.setPreferredSize(new Dimension(20,20));
-
     }
+
+    /**
+     * Label is put in center of connection
+     * @return point where the label is
+     */
     public Point positionOfLabel(){
         // krok bude 1 pokud cooFrom.x je mensi nez cooTo.x, jinak -1
         Integer stepX = (cooFrom.x - cooTo.x)/2 + cooTo.x;
         Integer stepY = (cooFrom.y - cooTo.y)/2 + cooTo.y;
         Point centerLine = new Point( stepX,  stepY);
+        // 4 is because of height and width of label (we use width and height of block)
+        // 2 make it even smaller
         centerLine.setLocation(centerLine.x-blockFrom.getWidthBlock()/4/2, centerLine.y-blockFrom.getHeightBlock()/4/2);
         return centerLine;
     }
@@ -111,7 +113,6 @@ public class Connection  {
      */
     public void actualize(){
         // must count position of port according to block and his id
-        System.out.println("Update connection, port id: " + idFromPort + " and second port id:" + idToPort);
         blockFrom.updateInputPort();
         blockFrom.updateOutputPort();
 
@@ -119,12 +120,8 @@ public class Connection  {
         blockTo.updateOutputPort();
         setCooFrom( blockFrom.getPort(idFromPort, typeFrom) );
         setCooTo( blockTo.getPort(idToPort, typeTo) );
-        System.out.println(cooTo);
-        System.out.println(cooFrom);
-        System.out.println(positionOfLabel());
 
         centerLabelToolTip.setBounds(positionOfLabel().x, positionOfLabel().y,
                 blockFrom.getWidthBlock()/4, blockFrom.getHeightBlock()/4);
     }
-
 }

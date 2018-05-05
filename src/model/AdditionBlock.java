@@ -18,8 +18,8 @@ public class AdditionBlock extends Block {
 
     public AdditionBlock(HashMap<Integer, Port> inputPortsPorts, HashMap<Integer, Port> outputPortsPorts) {
         super(inputPortsPorts,outputPortsPorts);
-        icon = "img/addition.png"; // locations of icon for view
-        selectedIcon = "img/selected/addition-sel.png"; // location of selected icon for view
+        icon = "lib/img/addition.png"; // locations of icon for view
+        selectedIcon = "lib/lib/img/selected/addition-sel.png"; // location of selected icon for view
         name = "Addition"; // name of block
         setCountInput(3);
         setCountOutput(1);

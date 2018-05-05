@@ -808,6 +808,7 @@ public class Program {
         }
         double val = 0;
         int i = 0;
+        boolean correct = true;
         String valueStr ="";
         for ( String name : chosenConn.getOutput().getHashOfValue().keySet() ){
             // check if double
@@ -816,17 +817,24 @@ public class Program {
                 val = Double.parseDouble(valueStr);
                 chosenConn.getOutput().getHashOfValue().put(name, val);
                 chosenConn.getInput().getHashOfValue().put(name, val);
-                dashboard.labelIconsGUI[i].setIcon(dashboard.iconYes);
-                dashboard.lstate.setForeground(new Color(000,200,81));
+                correct = true;
             } catch (NumberFormatException nfe){
                 dashboard.labelIconsGUI[i].setIcon(dashboard.iconNo);
                 System.err.println( valueStr + " is not a number");
+                correct = false;
                 JOptionPane.showMessageDialog(dashboard.frame1, "Value must be a number");
                 dashboard.textFieldValueGUI[i].setText(String.format("%.3f", (double) chosenConn.getOutput().getHashOfValue().get(name)));
             }
+
+            if ( correct ){
+                dashboard.labelIconsGUI[i].setIcon(dashboard.iconYes);
+            } else {
+                dashboard.labelIconsGUI[i].setIcon(dashboard.iconNo);
+            }
             i++;
         }
-        dashboard.repaint();
+
+        //dashboard.repaint();
     }
 
     /**

@@ -2,6 +2,9 @@ package model;
 
 import java.util.HashMap;
 
+/**
+ * Class for creating new blocks
+ */
 public class FactoryBlock {
     public Block getBlock(String blockName, HashMap<Integer, Port> inputP, HashMap<Integer, Port> outputP){
         if ( blockName == null ){

@@ -14,14 +14,19 @@ import java.util.HashMap;
 import java.util.*;
 
 public class Port {
-    public HashMap<String,Double> value ;
+    public HashMap<String,Double> value ; // value of port
     private Integer type; // type 1 - input port, type 2 - output port
-    private String name;
+    private String name; // name of port
     private Block ownerBlock;
     private boolean free = true;
     private Integer id;
     private Connection connection;
 
+    /**
+     * Constructor sets name and value of port
+     * @param name name of port
+     * @param hashvalue value of port
+     */
     public Port( String name, HashMap<String,Double> hashvalue ) {
         this.name = name;
         value = new HashMap<String, Double>();
@@ -29,12 +34,7 @@ public class Port {
             value.put(nameVal, hashvalue.get(nameVal));
 
         }
-        //System.out.println(hashvalue);
-        //this.id = id;
-        //this.type = type;
-        //this.ownerBlock = ownerBlock;
     }
-
 
     public void setId(Integer id) {
         this.id = id;
@@ -67,7 +67,6 @@ public class Port {
         this.free = false;
     }
 
-
     public Integer getType() {
         return this.type;
     }
@@ -88,14 +87,6 @@ public class Port {
 
     public void setValue( HashMap map ) {
         this.value.putAll( map );
-    }
-
-    public void addValue( String name, Double value ) {
-        this.value.put( name, value );
-    }
-
-    public void popValue( String name, Double value ) {
-        this.value.remove( name );
     }
 
     public HashMap<String, Double> getHashOfValue() {

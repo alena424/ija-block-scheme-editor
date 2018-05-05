@@ -17,12 +17,18 @@ public class InvertBlock extends Block {
 
     public InvertBlock(HashMap<Integer, Port> inputPortsPorts, HashMap<Integer, Port> outputPortsPorts) {
         super(inputPortsPorts,outputPortsPorts);
-        icon = "img/invert.png";
+        icon = "lib/img/invert.png";
         name = "Invert";
-        selectedIcon = "img/selected/invert.png";
+        selectedIcon = "lib/img/selected/invert.png";
         countInput = 2;
         countOutput = 2;
     }
+
+    /**
+     * Invert block:
+     * Block inverts value from first input to first output and from second input to second output
+     *
+     */
     public void execute() {
         // vezmeme hodnoty z input z portu 1 a zinvertujeme je na hodnoty v portu2
         Double val1 = inputPorts.get(1).getHashOfValue().get("Name1");

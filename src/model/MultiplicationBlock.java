@@ -19,11 +19,16 @@ public class MultiplicationBlock extends Block {
         super(inputPortsPorts,outputPortsPorts);
 
         name = "Multiplication";
-        icon = "img/multiplication.png";
-        selectedIcon = "img/selected/multiplication.png";
+        icon = "lib/img/multiplication.png";
+        selectedIcon = "lib/img/selected/multiplication.png";
         countInput = 2;
         countOutput = 1;
     }
+
+    /**
+     * Multiplication block:
+     * Numbers from second input port are multiplied by number from first input port
+     */
     public void execute() {
         // vezmeme hodnoty z input z portu 1 a vynasobime touto hodnotou hodnoty v portu2
         Double multiply = inputPorts.get(1).getHashOfValue().get("Name1");

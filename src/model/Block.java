@@ -12,25 +12,22 @@ package model;
 
 import javax.swing.*;
 import java.util.HashMap;
-import java.util.List;
-
 
 public abstract class Block {
 
     protected Integer id;
-    protected HashMap<Integer,Port> inputPorts; //= new HashMap<Integer, Port>();
-    protected HashMap<Integer,Port> outputPorts; //= new HashMap<Integer, Port>();
-    protected Integer level = 0;
-    public Integer countInput;
-    public Integer countOutput;
-    protected String name;
-    public Integer static_x = 0;
-    public Integer static_y = 0;
+    protected HashMap<Integer,Port> inputPorts; // input ports
+    protected HashMap<Integer,Port> outputPorts;  // output ports, integer is ID
+    protected Integer level = 0; // starting on first level
+    public Integer countInput; // number of input
+    public Integer countOutput; // number of output
+    protected String name; // name of block
+    public Integer static_x = 0; // if icon is static, coordinate x
+    public Integer static_y = 0; // if icon is static, coordinate y
 
     public boolean static_block = false; // flag, block can not be deleted and position is static
-    // defaultIcon
-    public String icon = "img/default.png";
-    public String selectedIcon = "img/default.png";
+    public String icon = "lib/img/default.png"; // defaultIcon
+    public String selectedIcon = "lib/img/default.png"; // location of selected icon
 
     public Block (HashMap<Integer,Port> inputPortsPorts, HashMap<Integer,Port> outputPortsPorts) {
         inputPorts = new HashMap<Integer, Port>(inputPortsPorts);
@@ -42,9 +39,6 @@ public abstract class Block {
         for (Integer i : outputPorts.keySet()){
             outputPorts.get(i).setOwnerBlock(this);
         }
-    }
-
-    protected Block() {
     }
 
     public HashMap<Integer, Port> getInputPorts() {
@@ -98,6 +92,22 @@ public abstract class Block {
         this.level = level;
     }
 
+    public Port getInputPortById( Integer order ) {
+        return this.inputPorts.get( order );
+    }
+
+    public Port getOutputPortById( Integer order ) {
+        return this.outputPorts.get( order );
+    }
+    public void execute() {
+    }
+
+    /**
+     * Method adds input port
+     * @param id id of port
+     * @param port port
+     * @return false - if port is already used/true - otherwise
+     */
     public boolean addinputPort( Integer id, Port port ) {
         // check ID
         if ( inputPorts.get(id) == null){
@@ -110,7 +120,12 @@ public abstract class Block {
         port.setOwnerBlock(this);
         return true;
     }
-
+    /**
+     * Method adds output port
+     * @param id id of port
+     * @param port port
+     * @return false - if port is already used/true - otherwise
+     */
     public boolean addoutputPort( Integer id, Port port) {
         if ( outputPorts.get(id) == null ){
             outputPorts.put(id,port);
@@ -124,16 +139,10 @@ public abstract class Block {
         //this.countOutput++;
     }
 
-    public void setInputPorts( HashMap map, Integer order ) {
-        if ( this.level == 0 && this.countInput > order && this.inputPorts.get( order ).isFree() ) {
-            this.inputPorts.get( order ).setValue( map );
-        }
-    }
-
-    public void setOutputPorts( HashMap map, Integer order ) {
-            this.outputPorts.get( order ).setValue( map );
-    }
-
+    /**
+     * Method decides if input port is free
+     * @return true or false
+     */
     public boolean isFreeInput() {
         for ( Port port : this.inputPorts.values() ) {
             if ( port.isFree() ) {
@@ -142,6 +151,10 @@ public abstract class Block {
         }
         return false;
     }
+    /**
+     * Method decides if output port is free
+     * @return true or false
+     */
     public boolean isFreeOutput() {
         for ( Port port : this.outputPorts.values() ) {
             if ( port.isFree() ) {
@@ -157,6 +170,9 @@ public abstract class Block {
         outputPorts.remove(port.getId());
     }
 
+    /**
+     * Method deletes all connections related to block
+     */
     public void deleteBlockConnection() {
         for ( Port port : this.inputPorts.values() ) {
             port.unsetConnection();
@@ -165,15 +181,4 @@ public abstract class Block {
             port.unsetConnection();
         }
     }
-
-    public Port getInputPortById( Integer order ) {
-        return this.inputPorts.get( order );
-    }
-
-    public Port getOutputPortById( Integer order ) {
-        return this.outputPorts.get( order );
-    }
-    public void execute() {
-    }
-
 }
