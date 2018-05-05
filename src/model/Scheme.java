@@ -82,9 +82,9 @@ public class Scheme {
         return true;
     }
 
-
     /**
-     * how many block we have at the moment
+     * numberFactorBlock
+     * @return how many block we have at the moment
      */
     public Integer numberFactorBlock(){
         return factoreBlock.size();
