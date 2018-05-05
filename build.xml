@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
-Sestavovaci skript pro projekt IJA 2013
-Jan Kalina <xkalin03@stud.fit.vutbr.cz>
-Michal Dobes <xdobes13@stud.fit.vutbr.cz>
+Sestavovaci skript pro projekt IJA 2018
+Alena Tesarova
+Jan Sorm
 -->
 <project name="projekt" default="run" basedir=".">
 <description>Sestavovaci pravidla projektu IJA</description>
@@ -12,8 +13,7 @@ Michal Dobes <xdobes13@stud.fit.vutbr.cz>
 <target name="run" depends="generate-build,generate-jar">
 <java classname="controller.Program" fork="true">
 <classpath>
-<path location="dest/ija2018.jar"/>
-<!--<path location="dest/hamcrest-core-1.3.jar"/>-->
+<path location="dest-client/ija2018.jar"/>
 </classpath>
 </java>
 </target>
@@ -23,25 +23,19 @@ Michal Dobes <xdobes13@stud.fit.vutbr.cz>
 <javac srcdir="src" destdir="build" encoding="UTF-8" includeantruntime="false">
 <classpath>
 
-<path refid="library.miglayout.classpath"/>
+<!--<path refid="library.miglayout.classpath"/>-->
 <fileset dir="lib">
 <include name="**/*.jar"/>
 </fileset>
 </classpath>
 </javac>
-<!--
-<mkdir dir="build/ija/projekt/images"/>
-<copy todir="build/ija/projekt/images">
-<fileset dir="src/ija/projekt/images">
-<include name="*.png"/>
-</fileset>
-</copy>-->
+
 </target>
 
 <target name="generate-jar">
-<mkdir dir="dest"/>
-<copy file="lib/hamcrest-core-1.3.jar" todir="dest" />
-<jar jarfile="dest/ija2018.jar" basedir="build" compress="true">
+<mkdir dir="dest-client"/>
+<copy file="lib/hamcrest-core-1.3.jar" todir="dest-client" />
+<jar jarfile="dest-client/ija2018.jar" basedir="build" compress="true">
 <manifest>
 
 <attribute name="Main-Class" value="controller.Program"/>
@@ -63,15 +57,15 @@ Michal Dobes <xdobes13@stud.fit.vutbr.cz>
 </target>
 
 
-<path id="library.miglayout.classpath">
+<!--<path id="library.miglayout.classpath">
 <pathelement location="${basedir}/lib/miglayout-core.jar"/>
 <pathelement location="${basedir}/lib/miglayout-swing.jar"/>
-</path>
+</path>-->
 
 <target name="clean">
 <delete includeemptydirs="true">
 <fileset dir="build" includes="**/*"/>
-<fileset dir="dest" includes="**/*"/>
+<fileset dir="dest-client" includes="**/*"/>
 <fileset dir="doc" includes="**/*"/>
 </delete>
 </target>
