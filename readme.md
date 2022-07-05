@@ -1,7 +1,6 @@
-===================
-IJA - projekt 2018
-Blokový editor
-===================
+# IJA - projekt 2018
+## Blokový editor
+
 
 -----------------------------
 Autoři:
